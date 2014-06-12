@@ -1,6 +1,4 @@
 <?xml version="1.0"?>
-
-
 <!DOCTYPE rdf:RDF [
     <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
     <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
@@ -12,8 +10,6 @@
     <!ENTITY sparql-grounding "http://localhost/ontology/sparqlGrounding.owl#" >
     <!ENTITY shadow-rdf "http://www.daml.org/services/owl-s/1.2/generic/ObjectList.owl#" >
 ]>
-
-
 <rdf:RDF xmlns="http://localhost/ontology/sparqlGrounding.owl#"
      xmlns:process="http://www.daml.org/services/owl-s/1.2/Process.owl#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -25,16 +21,18 @@
      xmlns:shadow-rdf="http://www.daml.org/services/owl-s/1.2/generic/ObjectList.owl#">
     <owl:Ontology rdf:about="http://localhost/ontology/sparqlGrounding.owl">
         <rdfs:comment>
-        Upper-level OWL ontology for Groundings that employ SPARQL services. Part of the OWL-S ontology; see http://www.daml.org/services/. This version is intended for use with SPARQL 1.1.
+        Upper-level OWL ontology for Groundings that employ services that was infered through Sparql query in Linked Data cloud. Part of the OWL-S ontology; see http://www.daml.org/services/. This version is intended for use with SPARQL 1.1.
         </rdfs:comment>
         <owl:versionInfo>
-        $Id: sparqlGrounding.owl,v 1.38 2014/04/17 17:11:56 leandroandrade Exp $
+        $Id: sparqlGrounding.owl,v 0.2 2014/06/11 20:55:56 leandroandrade Exp $
         </owl:versionInfo>
         <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Process.owl"/>
     </owl:Ontology>
     
-    
     <owl:Class rdf:about="&sparql-grounding;SparqlGrounding">
+        <rdfs:comment>
+            The class that grounds every process to a SPARQL query.
+        </rdfs:comment>
         <rdfs:subClassOf rdf:resource="&grounding;Grounding"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -42,12 +40,12 @@
                 <owl:allValuesFrom rdf:resource="&sparql-grounding;SparqlAtomicProcessGrounding"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment>
-            The class that grounds every process to a SPARQL query.
-        </rdfs:comment>
     </owl:Class>
     
     <owl:Class rdf:about="&sparql-grounding;SparqlAtomicProcessGrounding">
+        <rdfs:comment>
+            The class that relates elements of an OWL-S atomic process to a SPARQL query.
+        </rdfs:comment>
         <rdfs:subClassOf rdf:resource="&grounding;AtomicProcessGrounding"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -55,19 +53,8 @@
                 <owl:cardinality rdf:datatype="&xsd;#nonNegativeInteger">1</owl:cardinality>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment>
-            The class that relates elements of an OWL-S atomic process to a SPARQL query.
-        </rdfs:comment>
     </owl:Class>
     
-    <owl:DatatypeProperty rdf:about="&sparql-grounding;sparqlDocument">
-        <rdfs:comment>
-            The URI that indicates the SPARQL document to which this grounding refers to.
-        </rdfs:comment>
-        <rdfs:domain rdf:resource="&sparql-grounding;SparqlAtomicProcessGrounding"/>
-        <rdfs:range rdf:resource="&xsd;anyURI"/>
-    </owl:DatatypeProperty>
-
     <owl:DatatypeProperty rdf:about="&sparql-grounding;sparqlEndPoint">
         <rdfs:comment>
             A URI for a SPARQL endpoint that provides the operation to which this atomic process is grounded.
@@ -84,6 +71,46 @@
         <rdfs:domain rdf:resource="&sparql-grounding;SparqlAtomicProcessGrounding"/>
         <rdfs:range rdf:resource="&xsd;anyURI"/>
     </owl:DatatypeProperty>
+    
+    <!-- Sparql prefixes  -->
+    
+    <owl:ObjectProperty rdf:about="&sparql-grounding;SparqlPrefixies">
+        <rdfs:comment>
+            There should list the prefixies of sparql query.
+        </rdfs:comment>
+        <rdfs:domain rdf:resource="&sparql-grounding;SparqlAtomicProcessGrounding"/>
+        <rdfs:range rdf:resource="&sparql-grounding;SparqlPrefixMap"/>
+    </owl:ObjectProperty>
+
+    <owl:Class rdf:ID="SparqlPrefixMap">
+      <rdfs:comment>
+            Build a map of each prefix.
+        </rdfs:comment>
+      <rdfs:subClassOf>
+        <owl:Restriction>
+          <owl:onProperty rdf:resource="#PrefixName"/>
+          <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+        </owl:Restriction>
+      </rdfs:subClassOf>
+      <rdfs:subClassOf>
+        <owl:Restriction>
+          <owl:onProperty rdf:resource="#PrefixUri"/>
+          <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+        </owl:Restriction>
+      </rdfs:subClassOf>
+    </owl:Class>
+
+    <owl:DatatypeProperty rdf:ID="PrefixName">
+      <rdfs:domain rdf:resource="#SparqlPrefixMap"/>
+      <rdfs:range rdf:resource="&xsd;anyURI"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:ID="PrefixUri">
+      <rdfs:domain rdf:resource="#SparqlPrefixMap"/>
+      <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>    
+    
+    <!-- Inputs and outputs -->
     
     <owl:ObjectProperty rdf:about="&sparql-grounding;SparqlInputParam">
         <rdfs:comment>
@@ -102,11 +129,11 @@
     </owl:ObjectProperty>
     
     <owl:Class rdf:about="&sparql-grounding;SparqlInputParamMap">
+        <rdfs:comment>
+            The mapping entity that shows how to derive a Sparql entry response message parameter from an OWL-S parameter value.
+        </rdfs:comment>
         <rdfs:subClassOf rdf:resource="&grounding;InputMessageMap"/>
         <rdfs:subClassOf rdf:resource="&sparql-grounding;SparqlDataParamMap"/>
-        <rdfs:comment>
-            The mapping entity that shows how to derive a WADL response message parameter from an OWL-S parameter value.
-        </rdfs:comment>
     </owl:Class>
 
     <owl:Class rdf:about="&sparql-grounding;SparqlOutputParamMap">
@@ -144,46 +171,12 @@
     </owl:DatatypeProperty>
     
     
-    <owl:ObjectProperty rdf:about="&sparql-grounding;SparqlPrefixies">
-        <rdfs:comment>
-            There should be one instance of this property for each SPARQL input data.
-        </rdfs:comment>
-        <rdfs:domain rdf:resource="&sparql-grounding;SparqlAtomicProcessGrounding"/>
-        <rdfs:range rdf:resource="&sparql-grounding;SparqlPrefixMap"/>
-    </owl:ObjectProperty>
-
-    <owl:Class rdf:ID="SparqlPrefixMap">
-      <rdfs:comment>
-            There should be one instance of this property for each SPARQL input data.
-        </rdfs:comment>
-      <rdfs:subClassOf>
-        <owl:Restriction>
-          <owl:onProperty rdf:resource="#PrefixName"/>
-          <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
-        </owl:Restriction>
-      </rdfs:subClassOf>
-      <rdfs:subClassOf>
-        <owl:Restriction>
-          <owl:onProperty rdf:resource="#PrefixUri"/>
-          <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
-        </owl:Restriction>
-      </rdfs:subClassOf>
-    </owl:Class>
-
-    <owl:DatatypeProperty rdf:ID="PrefixName">
-      <rdfs:domain rdf:resource="#WadlResourceMethodRef"/>
-      <rdfs:range rdf:resource="&xsd;anyURI"/>
-    </owl:DatatypeProperty>
-
-    <owl:DatatypeProperty rdf:ID="PrefixUri">
-      <rdfs:domain rdf:resource="#WadlResourceMethodRef"/>
-      <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
+    <!-- Sparql Triples -->
     
     
     <owl:ObjectProperty rdf:about="&sparql-grounding;SparqlTriples">
         <rdfs:comment>
-            There should be one instance of this property for each SPARQL input data.
+            There should list the triples in where clauses of sparql query.
         </rdfs:comment>
         <rdfs:domain rdf:resource="&sparql-grounding;SparqlAtomicProcessGrounding"/>
         <rdfs:range rdf:resource="&sparql-grounding;SparqlTripleMap"/>
@@ -191,7 +184,7 @@
     
     <owl:Class rdf:ID="SparqlTripleMap">
       <rdfs:comment>
-            There should be one instance of this property for each SPARQL input data.
+            Build map of part of each triple.
         </rdfs:comment>
       <rdfs:subClassOf>
         <owl:Restriction>
@@ -214,17 +207,17 @@
     </owl:Class>
     
     <owl:DatatypeProperty rdf:ID="TripleSubject">
-      <rdfs:domain rdf:resource="#WadlResourceMethodRef"/>
+      <rdfs:domain rdf:resource="#SparqlTripleMap"/>
       <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:ID="TriplePredicate">
-      <rdfs:domain rdf:resource="#WadlResourceMethodRef"/>
+      <rdfs:domain rdf:resource="#SparqlTripleMap"/>
       <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
     <owl:DatatypeProperty rdf:ID="TripleObject">
-      <rdfs:domain rdf:resource="#WadlResourceMethodRef"/>
+      <rdfs:domain rdf:resource="#SparqlTripleMap"/>
       <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
 
