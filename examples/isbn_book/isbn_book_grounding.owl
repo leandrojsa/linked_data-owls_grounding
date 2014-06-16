@@ -43,22 +43,14 @@
 <!-- SPARQL Atomic Process Grounding -->
 
 <sparql:SparqlAtomicProcessGrounding rdf:ID="ISBN_Book-AtomicProcessGrounding">
-  <grounding:owlsProcess rdf:resource="&ypc;#ISBN_BOOK_PROCESS"/>
-  
-  <restful:wadlResourceMethod>
-    <restful:WadlResourceMethodRef>
-      <restful:resource rdf:datatype="&xsd;#anyURI">&wadl;#YNS-Resource</restful:resource>
-      <restful:method rdf:datatype="&xsd;#anyURI">&wadl;#YNS-Method-GET</restful:method>
-    </restful:WadlResourceMethodRef>
-  </restful:wadlResourceMethod>
-  
+  <grounding:owlsProcess rdf:resource="&isbn-book;#ISBN_BOOK_PROCESS"/>  
   
   <sparql:sparqlVersion rdf:datatype="&xsd;#anyURI">
     http://www.w3.org/TR/rdf-sparql-query/
   </sparql:sparqlVersion>
-  <restful:sparqlEndPoint rdf:datatype="&xsd;#anyURI">
+  <sparql:sparqlEndPoint rdf:datatype="&xsd;#anyURI">
     http://dbpedia.org/sparql
-  </restful:sparqlEndPoint>
+  </sparql:sparqlEndPoint>
   
   <!-- Prefixies -->
   
