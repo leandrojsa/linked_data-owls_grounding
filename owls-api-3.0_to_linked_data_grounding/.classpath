@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/activation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/arq-2.8.8.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/aterm-java-1.6.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/axis-1.4.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/axis-wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/jaxrpc-api-1.1.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/jcl-over-slf4j-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/jena-2.6.4.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/jgrapht-jdk1.5-0.7.3.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/pellet-2.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/relaxngDatatype-20020414.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/saaj-api-1.2.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/slf4j-log4j12-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/upnp-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/leandrojsa/Mestrado/Dissertação/linked_data-owls_grounding/owls-api-3.0_to_linked_data_grounding/dependencies/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

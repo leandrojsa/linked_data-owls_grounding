@@ -75,8 +75,8 @@
 
   <sparql:SparqlOutputParam>
     <sparql:SparqlOutputParamMap>
-      <grounding:owlsParameter rdf:resource="&isbn-book;#_ISBN"/>
-      <sparql:SparqlDataParam rdf:datatype="&xsd;#string">?var_isbn</sparql:SparqlDataParam>
+      <grounding:owlsParameter rdf:resource="&isbn-book;#_BOOK"/>
+      <sparql:SparqlDataParam rdf:datatype="&xsd;#string">?var_book</sparql:SparqlDataParam>
     </sparql:SparqlOutputParamMap>
   </sparql:SparqlOutputParam>
   
