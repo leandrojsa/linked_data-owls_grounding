@@ -54,12 +54,12 @@
   
   <!-- Prefixies -->
   
-  <sparql:SparqlPrefixies>
+  <sparql:SparqlPrefixes>
     <sparql:SparqlPrefixMap>
         <sparql:PrefixName>http://www.w3.org/1999/02/22-rdf-syntax-ns#</sparql:PrefixName>
         <sparql:PrefixUri>rdf</sparql:PrefixUri>                
     </sparql:SparqlPrefixMap>    
-  </sparql:SparqlPrefixies>
+  </sparql:SparqlPrefixes>
   
 
   <!-- Input Parameters -->
