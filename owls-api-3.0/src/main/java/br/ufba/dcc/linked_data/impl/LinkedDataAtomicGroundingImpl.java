@@ -86,9 +86,9 @@ public class LinkedDataAtomicGroundingImpl extends MessageMapAtomicGroundingImpl
 		return null;
 	}
 
-	@Override protected OWLObjectProperty inputMessageMapProperty() { return OWLSLinkedDataVocabulary.SparqlInputParam; }
+	@Override protected OWLObjectProperty inputMessageMapProperty() { return null;}//OWLSLinkedDataVocabulary.SparqlInputParam; }
 
-	@Override protected OWLObjectProperty outputMessageMapProperty() { return OWLSLinkedDataVocabulary.SparqlOutputParam; }
+	@Override protected OWLObjectProperty outputMessageMapProperty() { return null;}//OWLSLinkedDataVocabulary.SparqlOutputParam; }
 
 	@Override
 	protected Class<? extends MessageMap<String>> messageMapType() { return StringMessageMap.class; }

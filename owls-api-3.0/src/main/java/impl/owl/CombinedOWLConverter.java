@@ -1,7 +1,7 @@
 /*
  * Created on 28.07.2008
  *
- * (c) 2008 Thorsten Möller - University of Basel Switzerland
+ * (c) 2008 Thorsten Mï¿½ller - University of Basel Switzerland
  *
  * The MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy

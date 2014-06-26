@@ -116,7 +116,7 @@ public class GenericOWLConverter<T extends OWLObject> implements OWLObjectConver
 			{
 				return true;
 			}
-//			System.out.println(ind.getOntology() + " --- " + ind.getTypes());
+			//System.out.println(ind.getOntology() + " --- " + ind.getTypes());
 		}
 		return false;
 	}

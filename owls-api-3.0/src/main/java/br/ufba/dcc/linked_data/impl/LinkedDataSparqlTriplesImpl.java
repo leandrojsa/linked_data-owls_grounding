@@ -40,21 +40,27 @@ public class LinkedDataSparqlTriplesImpl extends WrappedIndividual implements Li
 	public URI getTripleObject() {
 		return getPropertyAsURI(OWLSLinkedDataVocabulary.TripleObject);
 	}
- /*
-	public void removeOperation() {
-		if (hasProperty(OWLS.Grounding.wsdlOperation))
-			removeProperty(OWLS.Grounding.wsdlOperation, null);
+ 
+	public void removeTripleSubject() {
+		if (hasProperty(OWLSLinkedDataVocabulary.TripleSubject))
+			removeProperty(OWLSLinkedDataVocabulary.TripleSubject, null);
 	}
 
-	public void removePortType() {
-		if (hasProperty(OWLS.Grounding.portType))
-			removeProperty(OWLS.Grounding.portType, null);
+	public void removeTriplePredicate() {
+		if (hasProperty(OWLSLinkedDataVocabulary.TriplePredicate))
+			removeProperty(OWLSLinkedDataVocabulary.TriplePredicate, null);
 	}
-*/
+	
+	public void removeTripleObject() {
+		if (hasProperty(OWLSLinkedDataVocabulary.TripleObject))
+			removeProperty(OWLSLinkedDataVocabulary.TripleObject, null);
+	}
+
 	@Override
 	public void delete() {
-		//removeOperation();
-		//removePortType();
+		removeTripleSubject();
+		removeTriplePredicate();
+		removeTripleObject();
 		super.delete();
 	}
 

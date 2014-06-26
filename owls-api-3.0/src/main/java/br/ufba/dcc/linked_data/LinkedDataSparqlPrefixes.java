@@ -15,5 +15,9 @@ public interface LinkedDataSparqlPrefixes extends OWLIndividual {
 	public void setPrefixUri(final URI op);
 
 	public URI getPrefixUri();
+	
+	public void removePrefixName();
+	
+	public void removePrefixUri();
 
 }

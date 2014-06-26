@@ -61,16 +61,21 @@ public class LinkedDataGroundingProviderImpl implements LinkedDataGroundingProvi
 	/* @see org.mindswap.owl.OWLObjectConverterProvider#registerConverters(org.mindswap.owl.OWLObjectConverterRegistry) */
 	public void registerConverters(final OWLObjectConverterRegistry registry)
 	{
+		System.out.println("um começo!");
+		
 		final OWLObjectConverter<LinkedDataGrounding> gc = new GenericOWLConverter<LinkedDataGrounding>(
 				LinkedDataGroundingImpl.class, OWLSLinkedDataVocabulary.SparqlGrounding);
-
+		
 		final OWLObjectConverter<LinkedDataAtomicGrounding> agc = new GenericOWLConverter<LinkedDataAtomicGrounding>(
 				LinkedDataAtomicGroundingImpl.class, OWLSLinkedDataVocabulary.SparqlAtomicProcessGrounding);
 
 		final OWLObjectConverter<LinkedDataSparqlDataParamMapImpl> immc =
-			new GenericOWLConverter<LinkedDataSparqlDataParamMapImpl>(LinkedDataSparqlDataParamMapImpl.class, OWLSLinkedDataVocabulary.SparqlIntputParamMap);
+			new GenericOWLConverter<LinkedDataSparqlDataParamMapImpl>(LinkedDataSparqlDataParamMapImpl.class,
+					OWLSLinkedDataVocabulary.SparqlIntputParamMap);
+		
 		final OWLObjectConverter<LinkedDataSparqlDataParamMapImpl> ommc =
-			new GenericOWLConverter<LinkedDataSparqlDataParamMapImpl>(LinkedDataSparqlDataParamMapImpl.class, OWLSLinkedDataVocabulary.SparqlOutputParamMap);
+			new GenericOWLConverter<LinkedDataSparqlDataParamMapImpl>(LinkedDataSparqlDataParamMapImpl.class,
+					OWLSLinkedDataVocabulary.SparqlOutputParamMap);
 
 		registry.registerConverter(LinkedDataSparqlPrefixes.class,
 			new GenericOWLConverter<LinkedDataSparqlPrefixes>(LinkedDataSparqlPrefixesImpl.class, OWLSLinkedDataVocabulary.SparqlPrefixMap));

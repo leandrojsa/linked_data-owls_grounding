@@ -32,21 +32,20 @@ public class LinkedDataSparqlPrefixesImpl extends WrappedIndividual implements L
 	public URI getPrefixUri() {
 		return getPropertyAsURI(OWLSLinkedDataVocabulary.PrefixUri);
 	}
- /*
-	public void removeOperation() {
-		if (hasProperty(OWLS.Grounding.wsdlOperation))
-			removeProperty(OWLS.Grounding.wsdlOperation, null);
+ 
+	public void removePrefixName() {
+		if (hasProperty(OWLSLinkedDataVocabulary.PrefixName))
+			removeProperty(OWLSLinkedDataVocabulary.PrefixName, null);
 	}
 
-	public void removePortType() {
-		if (hasProperty(OWLS.Grounding.portType))
-			removeProperty(OWLS.Grounding.portType, null);
+	public void removePrefixUri() {
+		if (hasProperty(OWLSLinkedDataVocabulary.PrefixUri))
+			removeProperty(OWLSLinkedDataVocabulary.PrefixUri, null);
 	}
-*/
 	@Override
 	public void delete() {
-		//removeOperation();
-		//removePortType();
+		removePrefixName();
+		removePrefixUri();
 		super.delete();
 	}
 

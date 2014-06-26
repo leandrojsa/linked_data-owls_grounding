@@ -26,16 +26,9 @@ public class OWLSLinkedDataVocabulary extends Vocabulary{
 	//ObjectProperties
 	
 	public static OWLObjectProperty SparqlPrefixes = ont.getObjectProperty(URIUtils.createURI(GROUNDING_NS + "SparqlPrefixes"));
-	
-	
 	public static OWLObjectProperty SparqlTriples = ont.getObjectProperty(URIUtils.createURI(GROUNDING_NS + "SparqlTriples"));
-	
-	
 	public static OWLObjectProperty SparqlInputParam = ont.getObjectProperty(URIUtils.createURI(GROUNDING_NS + "SparqlInputParam"));
 	public static OWLObjectProperty SparqlOutputParam = ont.getObjectProperty(URIUtils.createURI(GROUNDING_NS + "SparqlOutputParam"));
-	
-	
-	
 	
 	//DataProperties
 	
@@ -48,8 +41,5 @@ public class OWLSLinkedDataVocabulary extends Vocabulary{
 	public static OWLDataProperty TripleObject = ont.getDataProperty(URIUtils.createURI(GROUNDING_NS + "TripleObject"));
 	
 	public static OWLDataProperty sparqlEndPoint = ont.getDataProperty(URIUtils.createURI(GROUNDING_NS + "sparqlEndPoint"));
-	
-	
-	
 
 }

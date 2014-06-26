@@ -45,8 +45,8 @@ public class RunLinkedDataService {
 		
 		
 		// Carregando ontologias que descrevem o serviço
-		//URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/yns-service.owl");
-		URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/isbn_book_linked_data_grouding_.owls");
+		//URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/isbn_book_service.owls");
+		URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/isbn_book_linked_data_grounding.owls");
 		Service service = kb.readService(uri);
 		
 		//System.out.println(service.getGrounding());
