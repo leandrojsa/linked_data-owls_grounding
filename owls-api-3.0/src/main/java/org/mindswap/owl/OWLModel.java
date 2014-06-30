@@ -89,6 +89,9 @@ import org.mindswap.query.QueryLanguage;
 import org.mindswap.swrl.Atom;
 import org.mindswap.swrl.BuiltinAtom;
 
+import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
+import br.ufba.dcc.linked_data.SparqlGrounding;
+
 /**
  * A OWLModel is the data structure to manage a set of OWL axioms and assertions.
  * It is structured hierarchically, that is, it consists of a {@link #getBaseModel()
@@ -1036,6 +1039,9 @@ public interface OWLModel {
 	public WSDLOperationRef createWSDLOperationRef(URI uri);
 	public MessageMap<String> createWSDLInputMessageMap(URI uri);
 	public MessageMap<String> createWSDLOutputMessageMap(URI uri);
+	
+	public SparqlAtomicGrounding createSparqlAtomicGrounding(URI uri);
+	public SparqlGrounding createSparqlGrounding(URI uri);
 
 
 	public ValueConstant createValueConstant(OWLValue constantValue, Binding<?> enclosingBinding);

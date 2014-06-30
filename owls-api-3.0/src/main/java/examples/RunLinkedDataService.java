@@ -55,7 +55,7 @@ public class RunLinkedDataService {
 		//System.out.println(service.getGrounding());
 		// Definindo entradas
 		ValueMap<Input, OWLValue> inputs = new ValueMap<Input, OWLValue>();
-		inputs.setValue(process.getInput("_ISBN"), kb.createDataValue("ISBN 978-0-671-21781-5 (first edition)"));
+		inputs.setValue(process.getInput("_ISBN"), kb.createDataValue("'ISBN 0-375-50137-1 (1st ed hardcover)'@en"));
 		
 		//inputs.setValue(process.getInput("YNS-AppID"), kb.createDataValue("YahooDemo"));
 		//inputs.setValue(process.getInput("YNS-Query"), kb.createDataValue("Brasil"));

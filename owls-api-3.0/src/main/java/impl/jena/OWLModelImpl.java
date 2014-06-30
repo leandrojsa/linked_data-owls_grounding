@@ -156,6 +156,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import aterm.ATermAppl;
+import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
+import br.ufba.dcc.linked_data.SparqlGrounding;
+import br.ufba.dcc.linked_data.SparqlGroundingFactory;
 import ch.unibas.on.sem.datatypes.TypeMapper;
 
 import com.hp.hpl.jena.datatypes.BaseDatatype;
@@ -1227,6 +1230,16 @@ public abstract class OWLModelImpl implements OWLModel
 
 	public JavaVariable createJavaVariable(final URI uri)
 	{ return JavaGroundingFactory.createJavaVariable(uri, this); }
+	
+	public SparqlGrounding createSparqlGrounding(final URI uri)
+	{ 
+		System.out.println("Opa!");
+		return SparqlGroundingFactory.createSparqlGrounding(uri, this); }
+	
+	public SparqlAtomicGrounding createSparqlAtomicGrounding(final URI uri)
+	{ 
+		System.out.println("Opa!");
+		return SparqlGroundingFactory.createSparqlAtomicGrounding(uri, this); }
 
 	public ValueOf createValueOf(final URI uri)
 	{ return new ValueOfImpl(createInstance(OWLS.Process.ValueOf, uri)); }

@@ -4,18 +4,18 @@ import java.net.URI;
 
 import org.mindswap.owl.OWLIndividual;
 
-public interface LinkedDataSparqlTriples extends OWLIndividual{
+public interface SparqlTriples extends OWLIndividual{
 	
 	public void setTripleSubject(final URI op);
 
-	public URI getTripleSubject();
+	public String getTripleSubject();
 	
 	public void setTriplePredicate(final URI op);
 
-	public URI getTriplePredicate();
+	public String getTriplePredicate();
 	
 	public void setTripleObject(final URI op);
 
-	public URI getTripleObject();
+	public String getTripleObject();
 
 }

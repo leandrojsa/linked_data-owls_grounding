@@ -4,13 +4,13 @@ import java.net.URI;
 
 import org.mindswap.owl.OWLIndividual;
 
-public interface LinkedDataSparqlPrefixes extends OWLIndividual {
+public interface SparqlPrefixes extends OWLIndividual {
 	
 	
 
 	public void setPrefixName(final URI op);
 
-	public URI getPrefixName();
+	public String getPrefixName();
 	
 	public void setPrefixUri(final URI op);
 

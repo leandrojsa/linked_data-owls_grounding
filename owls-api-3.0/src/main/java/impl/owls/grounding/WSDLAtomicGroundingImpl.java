@@ -143,11 +143,13 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 		initWSDLOperation();
 		for (final WSDLParameter in : wsdlOperation.getInputs())
 		{
-			final MessageMap<String> mp = getMessageMap(true, in.getName());
+			
+			final MessageMap<String> mp = getMessageMap(true, in.getName());			
 			if (mp == null) continue;
-
+	
 			final Input input = mp.getOWLSParameter().castTo(Input.class);
 			final OWLValue inputValue = getParameterValue(input, inputs);
+			
 
 			Object inputValueObj;
 			final String xslt = mp.getTransformation();

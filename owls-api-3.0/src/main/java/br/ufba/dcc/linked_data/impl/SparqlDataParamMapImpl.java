@@ -8,11 +8,11 @@ import org.mindswap.owl.OWLObjectProperty;
 import org.mindswap.owls.grounding.MessageMap.StringMessageMap;
 import org.mindswap.owls.vocabulary.OWLS;
 
-import br.ufba.dcc.linked_data.OWLSLinkedDataVocabulary;
+import br.ufba.dcc.linked_data.OWLSSparqlVocabulary;
 
-public class LinkedDataSparqlDataParamMapImpl extends BaseMessageMap<String> implements StringMessageMap {
+public class SparqlDataParamMapImpl extends BaseMessageMap<String> implements StringMessageMap {
 
-	public LinkedDataSparqlDataParamMapImpl(OWLIndividual ind) {
+	public SparqlDataParamMapImpl(OWLIndividual ind) {
 		super(ind);
 	}
 
@@ -31,7 +31,7 @@ public class LinkedDataSparqlDataParamMapImpl extends BaseMessageMap<String> imp
 	    setProperty(OWLS.Grounding.xsltTransformationString, xsltTransformation);
 	}
 
-	@Override protected OWLDataProperty groundingParameterProperty() { return OWLSLinkedDataVocabulary.SparqlDataParam; }
+	@Override protected OWLDataProperty groundingParameterProperty() { return OWLSSparqlVocabulary.SparqlDataParam; }
 	@Override protected OWLObjectProperty owlsParameterProperty() { return OWLS.Grounding.owlsParameter; }
 
 }

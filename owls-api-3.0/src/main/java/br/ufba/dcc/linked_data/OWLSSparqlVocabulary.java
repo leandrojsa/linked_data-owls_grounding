@@ -7,7 +7,7 @@ import org.mindswap.owl.OWLOntology;
 import org.mindswap.owl.vocabulary.Vocabulary;
 import org.mindswap.utils.URIUtils;
 
-public class OWLSLinkedDataVocabulary extends Vocabulary{
+public class OWLSSparqlVocabulary extends Vocabulary{
 	
 	public static final String URI = "http://localhost/owl_s/ontology/";
 	public static final String GROUNDING_NS = URI + "sparqlGrounding.owl#";

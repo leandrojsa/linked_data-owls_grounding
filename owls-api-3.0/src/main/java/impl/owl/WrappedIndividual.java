@@ -162,6 +162,8 @@ public abstract class WrappedIndividual extends OWLObjectImpl implements OWLIndi
 	 */
 	protected <T extends OWLEntity> T getPropertyAs(final OWLObjectProperty prop, final Class<T> result) {
 		final OWLIndividual value = individual.getProperty(prop);
+		System.out.println(prop);
+		System.out.println(result);
 		return (value == null) ? null : value.castTo(result);
 	}
 
