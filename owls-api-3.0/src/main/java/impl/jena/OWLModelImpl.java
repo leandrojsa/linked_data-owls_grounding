@@ -159,6 +159,8 @@ import aterm.ATermAppl;
 import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
 import br.ufba.dcc.linked_data.SparqlGrounding;
 import br.ufba.dcc.linked_data.SparqlGroundingFactory;
+import br.ufba.dcc.linked_data.SparqlPrefixes;
+import br.ufba.dcc.linked_data.SparqlTriples;
 import ch.unibas.on.sem.datatypes.TypeMapper;
 
 import com.hp.hpl.jena.datatypes.BaseDatatype;
@@ -1233,13 +1235,23 @@ public abstract class OWLModelImpl implements OWLModel
 	
 	public SparqlGrounding createSparqlGrounding(final URI uri)
 	{ 
-		System.out.println("Opa!");
 		return SparqlGroundingFactory.createSparqlGrounding(uri, this); }
 	
 	public SparqlAtomicGrounding createSparqlAtomicGrounding(final URI uri)
 	{ 
-		System.out.println("Opa!");
 		return SparqlGroundingFactory.createSparqlAtomicGrounding(uri, this); }
+	
+	public SparqlPrefixes createSparqlPrefixes(final URI uri)
+	{ return SparqlGroundingFactory.createSparqlPrefixes(uri, this); }
+	
+	public SparqlTriples createSparqlTriples(final URI uri)
+	{ return SparqlGroundingFactory.createSparqlTriples(uri, this); }
+	
+	public MessageMap<String> createSparqlInputParamMap(final URI uri)
+	{ return SparqlGroundingFactory.createSparqlInputParamMap(uri, this);	}
+	
+	public MessageMap<String> createSparqlOutputParamMap(final URI uri)
+	{ return SparqlGroundingFactory.createSparqlOutputParamMap(uri, this);	}
 
 	public ValueOf createValueOf(final URI uri)
 	{ return new ValueOfImpl(createInstance(OWLS.Process.ValueOf, uri)); }

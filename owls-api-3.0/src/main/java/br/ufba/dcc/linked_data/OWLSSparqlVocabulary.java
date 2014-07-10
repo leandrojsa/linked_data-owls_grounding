@@ -17,7 +17,7 @@ public class OWLSSparqlVocabulary extends Vocabulary{
 	
 	public static OWLClass SparqlGrounding = 	ont.getClass(URIUtils.createURI(GROUNDING_NS + "SparqlGrounding"));
 	public static OWLClass SparqlAtomicProcessGrounding = 	ont.getClass(URIUtils.createURI(GROUNDING_NS + "SparqlAtomicProcessGrounding"));
-	public static OWLClass SparqlIntputParamMap = 	ont.getClass(URIUtils.createURI(GROUNDING_NS + "SparqlIntputParamMap"));
+	public static OWLClass SparqlInputParamMap = 	ont.getClass(URIUtils.createURI(GROUNDING_NS + "SparqlInputParamMap"));
 	public static OWLClass SparqlOutputParamMap = 	ont.getClass(URIUtils.createURI(GROUNDING_NS + "SparqlOutputParamMap"));
 
 	public static OWLClass SparqlTripleMap = ont.getClass(URIUtils.createURI(GROUNDING_NS + "SparqlTripleMap"));

@@ -37,7 +37,7 @@ public class SparqlGroundingProviderImpl implements SparqlGroundingProvider{
 	/* @see org.mindswap.owls.grounding.WSDLGroundingProvider#createWSDLInputMessageMap(java.net.URI, org.mindswap.owl.OWLModel) */
 	public MessageMap<String> createSparqlInputParamMap(final URI uri, final OWLModel model)
 	{
-		return new SparqlDataParamMapImpl(model.createInstance(OWLSSparqlVocabulary.SparqlIntputParamMap, uri));
+		return new SparqlDataParamMapImpl(model.createInstance(OWLSSparqlVocabulary.SparqlInputParamMap, uri));
 	}
 
 	/* @see org.mindswap.owls.grounding.WSDLGroundingProvider#createWSDLOutputMessageMap(java.net.URI, org.mindswap.owl.OWLModel) */
@@ -61,7 +61,7 @@ public class SparqlGroundingProviderImpl implements SparqlGroundingProvider{
 	/* @see org.mindswap.owl.OWLObjectConverterProvider#registerConverters(org.mindswap.owl.OWLObjectConverterRegistry) */
 	public void registerConverters(final OWLObjectConverterRegistry registry)
 	{
-		
+		System.out.println("Inicio do Grounding SPARQL: " + System.currentTimeMillis());
 		final OWLObjectConverter<SparqlGrounding> gc = new GenericOWLConverter<SparqlGrounding>(
 				SparqlGroundingImpl.class, OWLSSparqlVocabulary.SparqlGrounding);
 		
@@ -70,7 +70,7 @@ public class SparqlGroundingProviderImpl implements SparqlGroundingProvider{
 
 		final OWLObjectConverter<SparqlDataParamMapImpl> immc =
 			new GenericOWLConverter<SparqlDataParamMapImpl>(SparqlDataParamMapImpl.class,
-					OWLSSparqlVocabulary.SparqlIntputParamMap);
+					OWLSSparqlVocabulary.SparqlInputParamMap);
 	
 		final OWLObjectConverter<SparqlDataParamMapImpl> ommc =
 			new GenericOWLConverter<SparqlDataParamMapImpl>(SparqlDataParamMapImpl.class,
@@ -87,10 +87,16 @@ public class SparqlGroundingProviderImpl implements SparqlGroundingProvider{
 
 		registry.extendByConverter(Grounding.class, gc);
 		registry.extendByConverter(AtomicGrounding.class, agc);
+		
+		
+		registry.extendByConverter(StringMessageMap.class, ommc);
+		registry.extendByConverter(StringMessageMap.class, immc);
+		//registry.extendByConverter(SparqlDataParamMapImpl.class, immc);
+		//registry.extendByConverter(SparqlDataParamMapImpl.class, ommc);
+		
 		registry.extendByConverter(MessageMap.class, immc);
 		registry.extendByConverter(MessageMap.class, ommc);
-		registry.extendByConverter(StringMessageMap.class, immc);
-		registry.extendByConverter(StringMessageMap.class, ommc);
+		
 	}
 
 

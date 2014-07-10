@@ -45,6 +45,9 @@ import br.ufba.dcc.linked_data.SparqlTriples;
 public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<String> implements SparqlAtomicGrounding{
 	
 	private String query;
+	private StringBuffer prefixes;
+	private StringBuffer select;
+	private List<Vector<String>> l_triples;
 	private static final Logger logger = LoggerFactory.getLogger(SparqlAtomicGroundingImpl.class);
 	
 
@@ -86,6 +89,7 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			while(i.hasNext()){
 				SparqlTriples t = i.next();
 				Vector<String> v = new Vector<String>();
+				//verificar se a string é URI
 				v.add(t.getTripleSubject());
 				v.add(t.getTriplePredicate());
 				v.add(t.getTripleObject());
@@ -112,6 +116,7 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			}
 			
 		}
+		select.append("\n");
 		return select;
 	}
 	
@@ -137,36 +142,57 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 	@Override
 	public ValueMap<Output, OWLValue> invoke(ValueMap<Input, OWLValue> inputs,	OWLKnowledgeBase env)
 			throws ExecutionException {
+		System.out.println("Inicio execução: " + System.currentTimeMillis());
 		
-		System.out.println("\\o/");
-		System.out.println(buildPrexies());
-		System.out.println(buildTriples());
-		System.out.println(buildSelectStatement());
+		prefixes = buildPrexies();
+		select = buildSelectStatement();
+		l_triples = buildTriples();
+	
+		
+		//code for relate inputs data with varibles in triples
 		Iterator<Entry<Input, OWLValue>> i = inputs.iterator();
 		while(i.hasNext()){
 			Entry<Input, OWLValue> input = i.next();
-			for (final Input inputParam : getProcess().getInputs())
-			{
-
+			for (final Input inputParam : getProcess().getInputs()){
 				final MessageMap<String> mp = getMessageMap(inputParam);
 				final String var = mp.getGroundingParameter();
 				System.out.println(var);
+				Iterator<Vector<String>> t = l_triples.iterator();
+				while(t.hasNext()){
+					Vector<String> triple = t.next();
+					for(int j=0; j<3; j++){
+						if (triple.get(j).contentEquals(var)){
+							triple.set(j, input.getValue().toString());							
+						}
+					}
+					
+				}
 			}			
-			//final MessageMap<String> mp = getMessageMap(true, input.getKey().getURI());
-			//Input x = mp.getOWLSParameter().castTo(Input.class);
-			//inputMessageMapProperty().getPropertyAsIndividual(prop)
-			//.getPropertyAsIndividual(input.getKey().getURI())
-//			System.out.println("Oooooi: " + x);
 		}
+		
+		// build query string to execute sparql query
+		query = prefixes.toString();
+		query = query + select.toString();
+		query = query + "WHERE {\n";
+		Iterator<Vector<String>> t = l_triples.iterator();
+		while(t.hasNext()){	
+			Vector<String> triple = t.next();
+			query = query + triple.get(0) + " " + triple.get(1) + " " + triple.get(2) + " .\n";
+		}		
+		query = query + "}";
+		System.out.println(query);
+		/*
 		String str_query="PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
                          "SELECT ?var_book\n"+
                          "WHERE {\n"+
                          "?var_book rdf:type <http://dbpedia.org/ontology/Book> .\n"+
                          "?var_book <http://dbpedia.org/ontology/isbn> 'ISBN 0-375-50137-1 (1st ed hardcover)'@en .\n"+
 						 "}";
-		Query query = QueryFactory.create(str_query);
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(getSparqlEndPoint().toString(), query);
+						 */
+		Query sparqlQuery = QueryFactory.create(query);
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(getSparqlEndPoint().toString(), sparqlQuery);
 		//QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
+		System.out.println("Fim  do grounding: " + System.currentTimeMillis());
 		ResultSet result = qexec.execSelect() ;
 		qexec.close() ;
 		
@@ -176,14 +202,12 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 
 	@Override
 	protected MessageMap<String> createInputMessageMap() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		return getOntology().createSparqlInputParamMap(null);
+		}
 
 	@Override
 	protected MessageMap<String> createOutputMessageMap() {
-		// TODO Auto-generated method stub
-		return null;
+		return getOntology().createSparqlOutputParamMap(null);
 	}
 
 	@Override protected OWLObjectProperty inputMessageMapProperty() {

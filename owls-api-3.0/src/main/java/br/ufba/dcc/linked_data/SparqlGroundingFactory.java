@@ -31,7 +31,7 @@ public class SparqlGroundingFactory {
 			return provider.createSparqlTriples(uri, model);
 		}
 
-		public static final MessageMap<String> SparqlInputParamMap(final URI uri, final OWLModel model)
+		public static final MessageMap<String> createSparqlInputParamMap(final URI uri, final OWLModel model)
 		{
 			return provider.createSparqlInputParamMap(uri, model);
 		}

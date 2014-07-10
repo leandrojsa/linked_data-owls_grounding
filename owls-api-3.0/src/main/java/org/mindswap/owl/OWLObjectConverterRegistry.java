@@ -83,8 +83,8 @@ public class OWLObjectConverterRegistry
 			JavaGroundingProvider.class, JavaGroundingProvider.DEFAULT_JAVA_GROUNDING_PROVIDER);
 		WSDLGroundingProvider wsdlGdgProvider = ServiceFinder.instance().loadImplementation(
 			WSDLGroundingProvider.class, WSDLGroundingProvider.DEFAULT_WSDL_GROUNDING_PROVIDER);
-		UPnPGroundingProvider upnpGdgProvider = ServiceFinder.instance().loadImplementation(
-			UPnPGroundingProvider.class, UPnPGroundingProvider.DEFAULT_UPNP_GROUNDING_PROVIDER);
+		//UPnPGroundingProvider upnpGdgProvider = ServiceFinder.instance().loadImplementation(
+		//	UPnPGroundingProvider.class, UPnPGroundingProvider.DEFAULT_UPNP_GROUNDING_PROVIDER);
 		SWRLProvider swrlProvider = ServiceFinder.instance().loadImplementation(
 			SWRLProvider.class, SWRLProvider.DEFAULT_SWRL_PROVIDER);
 
@@ -100,8 +100,8 @@ public class OWLObjectConverterRegistry
 		if (javaGdgProvider != null) javaGdgProvider.registerConverters(this);
 		else logNoImplFound(JavaGroundingProvider.class);
 
-		if (upnpGdgProvider != null) upnpGdgProvider.registerConverters(this);
-		else logNoImplFound(UPnPGroundingProvider.class);
+	//	if (upnpGdgProvider != null) upnpGdgProvider.registerConverters(this);
+	//	else logNoImplFound(UPnPGroundingProvider.class);
 
 		if (swrlProvider != null) swrlProvider.registerConverters(this);
 		else logNoImplFound(SWRLProvider.class);

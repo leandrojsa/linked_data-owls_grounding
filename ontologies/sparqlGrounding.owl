@@ -137,9 +137,9 @@
         <rdfs:range rdf:resource="#SparqlOutputParamMap"/>
     </owl:ObjectProperty>
 
-    <owl:Class rdf:ID="SparqlIntputParamMap">
+    <owl:Class rdf:ID="SparqlInputParamMap">
         <rdfs:subClassOf rdf:resource="#SparqlDataParamMap"/>
-        <rdfs:subClassOf rdf:resource="#InputMessageMap"/>
+        <rdfs:subClassOf rdf:resource="&grounding;InputMessageMap"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="#SparqlDataParam"/>
@@ -159,7 +159,7 @@
     
     <owl:Class rdf:ID="SparqlOutputParamMap">
         <rdfs:subClassOf rdf:resource="#SparqlDataParamMap"/>
-        <rdfs:subClassOf rdf:resource="#OutputMessageMap"/>
+        <rdfs:subClassOf rdf:resource="&grounding;OutputMessageMap"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="#SparqlDataParam"/>

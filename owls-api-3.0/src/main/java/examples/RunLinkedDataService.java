@@ -25,6 +25,8 @@ public class RunLinkedDataService {
 	 * @throws ExecutionException 
 	 */
 	public static void main(String[] args) throws URISyntaxException, IOException, ExecutionException {
+		long time_start = System.currentTimeMillis();
+		long time_start_process_execution=0;
 		ProcessExecutionEngine exec = OWLSFactory.createExecutionEngine();
 		exec.addMonitor(new DefaultProcessMonitor());
 		final OWLKnowledgeBase kb = OWLFactory.createKB();
@@ -62,8 +64,11 @@ public class RunLinkedDataService {
 		
 		// Criando conjunto de saídas e executando processo
 		ValueMap<Output, OWLValue> outputs = new ValueMap<Output, OWLValue>();
+		time_start_process_execution=System.currentTimeMillis();
+		System.out.println("Leitura inicial do serviço (antes do Process execute): " + (time_start_process_execution- time_start));
 		outputs = exec.execute(process, inputs, kb);
-
+		
+		
 		// Exibindo a saída em RDF
 		System.out.println(process.getOutput().toRDF(true, true));
 		

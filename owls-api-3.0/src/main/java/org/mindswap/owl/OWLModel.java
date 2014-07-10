@@ -91,6 +91,8 @@ import org.mindswap.swrl.BuiltinAtom;
 
 import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
 import br.ufba.dcc.linked_data.SparqlGrounding;
+import br.ufba.dcc.linked_data.SparqlPrefixes;
+import br.ufba.dcc.linked_data.SparqlTriples;
 
 /**
  * A OWLModel is the data structure to manage a set of OWL axioms and assertions.
@@ -1042,6 +1044,10 @@ public interface OWLModel {
 	
 	public SparqlAtomicGrounding createSparqlAtomicGrounding(URI uri);
 	public SparqlGrounding createSparqlGrounding(URI uri);
+	public SparqlPrefixes createSparqlPrefixes(URI uri);
+	public SparqlTriples createSparqlTriples(URI uri);
+	public MessageMap<String> createSparqlInputParamMap(URI uri);
+	public MessageMap<String> createSparqlOutputParamMap(URI uri);
 
 
 	public ValueConstant createValueConstant(OWLValue constantValue, Binding<?> enclosingBinding);

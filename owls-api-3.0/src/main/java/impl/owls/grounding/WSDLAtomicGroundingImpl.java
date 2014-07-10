@@ -152,6 +152,7 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 			
 
 			Object inputValueObj;
+			
 			final String xslt = mp.getTransformation();
 			if (inputValue.isIndividual())
 			{
@@ -182,7 +183,6 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 
 			in.setValue(inputValueObj);
 		}
-
 		try
 		{
 			wsdlOperation.invoke();

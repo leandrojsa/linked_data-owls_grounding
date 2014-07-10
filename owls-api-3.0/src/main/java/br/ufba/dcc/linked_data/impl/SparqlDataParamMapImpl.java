@@ -1,8 +1,11 @@
 package br.ufba.dcc.linked_data.impl;
 
+import java.net.URI;
+
 import impl.owls.grounding.BaseMessageMap;
 
 import org.mindswap.owl.OWLDataProperty;
+import org.mindswap.owl.OWLDataValue;
 import org.mindswap.owl.OWLIndividual;
 import org.mindswap.owl.OWLObjectProperty;
 import org.mindswap.owls.grounding.MessageMap.StringMessageMap;
@@ -23,6 +26,9 @@ public class SparqlDataParamMapImpl extends BaseMessageMap<String> implements St
 	    return getPropertyAsString(OWLS.Grounding.xsltTransformationString);
 	}
 	
+	protected OWLDataValue groundingParameterValue(final String value) { 
+		return getOntology().createDataValue(URI.create(value)); 
+	}
 
 	/* @see org.mindswap.owls.grounding.MessageMap#setTransformation(java.lang.Object) */
 	
