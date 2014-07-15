@@ -87,7 +87,6 @@ public class CombinedOWLConverter<T extends OWLObject> implements OWLObjectConve
 		for (final OWLObjectConverter<? extends T> converter : converters)
 		{
 //FIXME
-			System.out.println(converter);
 			if(!converter.toString().contains("OWL individual -> null (implemented by class impl.owls.grounding.UPnPGroundingImpl)") &&
 			   !converter.toString().contains("OWL individual -> null (implemented by class impl.owls.grounding.UPnPMessageMapImpl)")){
 				if (converter.canCast(object, true)) // true to find the "best" match, i.e., the closest type

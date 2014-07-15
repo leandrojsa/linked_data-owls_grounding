@@ -32,6 +32,7 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
 import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
@@ -90,9 +91,23 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 				SparqlTriples t = i.next();
 				Vector<String> v = new Vector<String>();
 				//verificar se a string é URI
-				v.add(t.getTripleSubject());
-				v.add(t.getTriplePredicate());
-				v.add(t.getTripleObject());
+				if (isURI(t.getTripleSubject())){
+					v.add("<"+t.getTripleSubject()+">");
+				}else{
+					v.add(t.getTripleSubject());
+				}
+				
+				if (isURI(t.getTriplePredicate())){
+					v.add("<"+t.getTriplePredicate()+">");
+				}else{
+					v.add(t.getTriplePredicate());
+				}
+				
+				if (isURI(t.getTripleObject())){
+					v.add("<"+t.getTripleObject()+">");
+				}else{
+					v.add(t.getTripleObject());
+				}
 				v_triples.add(v);
 			}
 		 
@@ -112,7 +127,7 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			if(i == i_size){
 				select.append(var);
 			}else{
-				select.append(var + ", ");
+				select.append(var + " ");
 			}
 			
 		}
@@ -181,24 +196,51 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 		}		
 		query = query + "}";
 		System.out.println(query);
-		/*
-		String str_query="PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
-                         "SELECT ?var_book\n"+
-                         "WHERE {\n"+
-                         "?var_book rdf:type <http://dbpedia.org/ontology/Book> .\n"+
-                         "?var_book <http://dbpedia.org/ontology/isbn> 'ISBN 0-375-50137-1 (1st ed hardcover)'@en .\n"+
-						 "}";
-						 */
+		//String q = "PREFIX foaf:  <http://xmlns.com/foaf/0.1/> \n SELECT ?name ?person \n WHERE {\n ?person foaf:name ?name .\n} LIMIT 3";
 		Query sparqlQuery = QueryFactory.create(query);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(getSparqlEndPoint().toString(), sparqlQuery);
 		//QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
-		System.out.println("Fim  do grounding: " + System.currentTimeMillis());
+		///System.out.println("Fim  do grounding: " + System.currentTimeMillis());
 		ResultSet result = qexec.execSelect() ;
 		qexec.close() ;
 		
-		System.out.println(result);
-		return null;
+		//build output
+		final ValueMap<Output, OWLValue> results = new ValueMap<Output, OWLValue>();
+		for (final Output outputParam : getProcess().getOutputs()){
+			final MessageMap<String> mp = getMessageMap(outputParam);
+			final String outputVar = mp.getGroundingParameter();
+			while(result.hasNext()){
+				QuerySolution r = result.next();
+				Object outputValue = r.get(outputVar);
+				//System.out.println(outputParam.getParamType());
+				results.setValue(outputParam, env.createDataValue(outputValue));
+				//if (outputParam.getParamType().isDataType())
+				//	results.setValue(outputParam, env.createDataValue(outputValue));
+				//else
+				//	results.setValue(outputParam, env.parseLiteral(outputValue.toString()));
+			}
+			//System.out.println(outputVar);
+		}
+		
+		return results;
 	}
+	
+	private boolean isURI(String urlString)
+    {
+        boolean result = false;
+        try
+        {
+            URL url = new URL(urlString);
+            String protocol = url.getProtocol();
+            if (protocol != null && protocol.trim().length() > 0)
+                result = true;
+        }
+        catch (MalformedURLException e)
+        {
+            return false;
+        }
+        return result;
+    }
 
 	@Override
 	protected MessageMap<String> createInputMessageMap() {

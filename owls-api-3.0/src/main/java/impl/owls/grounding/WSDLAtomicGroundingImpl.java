@@ -226,7 +226,8 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 			if (outputParam.getParamType().isDataType())
 				results.setValue(outputParam, env.createDataValue(outputValue));
 			else
-				results.setValue(outputParam, env.parseLiteral(outputValue.toString()));
+				results.setValue(outputParam, env.createDataValue(outputValue));
+				//results.setValue(outputParam, env.parseLiteral(outputValue.toString()));
 		}
 
 		return results;
