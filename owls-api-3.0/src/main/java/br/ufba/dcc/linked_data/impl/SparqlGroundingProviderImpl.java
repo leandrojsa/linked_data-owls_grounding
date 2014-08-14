@@ -13,6 +13,8 @@ import org.mindswap.owls.grounding.Grounding;
 import org.mindswap.owls.grounding.MessageMap;
 import org.mindswap.owls.grounding.MessageMap.StringMessageMap;
 
+import examples.RunLinkedDataService;
+
 import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
 import br.ufba.dcc.linked_data.SparqlGrounding;
 import br.ufba.dcc.linked_data.SparqlGroundingProvider;
@@ -61,7 +63,7 @@ public class SparqlGroundingProviderImpl implements SparqlGroundingProvider{
 	/* @see org.mindswap.owl.OWLObjectConverterProvider#registerConverters(org.mindswap.owl.OWLObjectConverterRegistry) */
 	public void registerConverters(final OWLObjectConverterRegistry registry)
 	{
-		System.out.println("Inicio do Grounding SPARQL: " + System.currentTimeMillis());
+		RunLinkedDataService.c = System.currentTimeMillis();
 		final OWLObjectConverter<SparqlGrounding> gc = new GenericOWLConverter<SparqlGrounding>(
 				SparqlGroundingImpl.class, OWLSSparqlVocabulary.SparqlGrounding);
 		

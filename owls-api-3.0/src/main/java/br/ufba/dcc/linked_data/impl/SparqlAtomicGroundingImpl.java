@@ -157,7 +157,8 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 	@Override
 	public ValueMap<Output, OWLValue> invoke(ValueMap<Input, OWLValue> inputs,	OWLKnowledgeBase env)
 			throws ExecutionException {
-		System.out.println("Inicio execução: " + System.currentTimeMillis());
+		long x = System.currentTimeMillis();
+		//System.out.println("Inicio execução: " + x);
 		
 		prefixes = buildPrexies();
 		select = buildSelectStatement();
@@ -171,7 +172,7 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			for (final Input inputParam : getProcess().getInputs()){
 				final MessageMap<String> mp = getMessageMap(inputParam);
 				final String var = mp.getGroundingParameter();
-				System.out.println(var);
+				//System.out.println(var);
 				Iterator<Vector<String>> t = l_triples.iterator();
 				while(t.hasNext()){
 					Vector<String> triple = t.next();
@@ -195,12 +196,14 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			query = query + triple.get(0) + " " + triple.get(1) + " " + triple.get(2) + " .\n";
 		}		
 		query = query + "}";
-		System.out.println(query);
+		//System.out.println(query);
 		//String q = "PREFIX foaf:  <http://xmlns.com/foaf/0.1/> \n SELECT ?name ?person \n WHERE {\n ?person foaf:name ?name .\n} LIMIT 3";
 		Query sparqlQuery = QueryFactory.create(query);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(getSparqlEndPoint().toString(), sparqlQuery);
 		//QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
-		///System.out.println("Fim  do grounding: " + System.currentTimeMillis());
+		long y = System.currentTimeMillis();
+		//System.out.println("Fim  do grounding: (y) " + y );
+		System.out.println("Tempo de preparação para execução do serviço: " + (y-x));
 		ResultSet result = qexec.execSelect() ;
 		qexec.close() ;
 		

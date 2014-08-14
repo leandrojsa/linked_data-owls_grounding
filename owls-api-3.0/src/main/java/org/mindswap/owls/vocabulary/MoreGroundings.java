@@ -1,7 +1,7 @@
 //The MIT License
 //
 // Copyright (c) 2004 Evren Sirin
-// Copyright (c) 2009 Thorsten Möller - University of Basel Switzerland
+// Copyright (c) 2009 Thorsten Mï¿½ller - University of Basel Switzerland
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to

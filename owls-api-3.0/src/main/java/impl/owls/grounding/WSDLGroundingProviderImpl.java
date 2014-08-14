@@ -41,6 +41,8 @@ import org.mindswap.owls.grounding.WSDLOperationRef;
 import org.mindswap.owls.grounding.MessageMap.StringMessageMap;
 import org.mindswap.owls.vocabulary.OWLS;
 
+import examples.RunLinkedDataService;
+
 /**
  *
  * @author unascribed
@@ -88,8 +90,11 @@ public class WSDLGroundingProviderImpl implements WSDLGroundingProvider
 	/* @see org.mindswap.owl.OWLObjectConverterProvider#registerConverters(org.mindswap.owl.OWLObjectConverterRegistry) */
 	public void registerConverters(final OWLObjectConverterRegistry registry)
 	{
+		RunLinkedDataService.a = System.currentTimeMillis();
+		//System.out.println("Inicio do Grounding WSDL: " + System.currentTimeMillis());
 		final OWLObjectConverter<WSDLGrounding> gc = new GenericOWLConverter<WSDLGrounding>(
 			WSDLGroundingImpl.class, OWLS.Grounding.WsdlGrounding);
+		
 
 		final OWLObjectConverter<WSDLAtomicGrounding> agc = new GenericOWLConverter<WSDLAtomicGrounding>(
 			WSDLAtomicGroundingImpl.class, OWLS.Grounding.WsdlAtomicProcessGrounding);

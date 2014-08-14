@@ -41,6 +41,8 @@ import org.mindswap.owls.grounding.JavaVariable;
 import org.mindswap.owls.vocabulary.MoreGroundings;
 import org.mindswap.owls.vocabulary.MoreGroundings.Java;
 
+import examples.RunLinkedDataService;
+
 /**
  *
  * @author unascribed
@@ -82,6 +84,8 @@ public class JavaGroundingProviderImpl implements JavaGroundingProvider
 	/* @see org.mindswap.owl.OWLObjectConverterProvider#registerConverters(org.mindswap.owl.OWLObjectConverterRegistry) */
 	public void registerConverters(final OWLObjectConverterRegistry registry)
 	{
+		RunLinkedDataService.b = System.currentTimeMillis();
+		System.out.println("Inicio do Grounding WSDL: " + (RunLinkedDataService.b- RunLinkedDataService.a));
 		final OWLObjectConverter<JavaGrounding> gc =	new GenericOWLConverter<JavaGrounding>(
 			JavaGroundingImpl.class, MoreGroundings.Java.JavaGrounding);
 

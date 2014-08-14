@@ -140,6 +140,8 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 	public ValueMap<Output, OWLValue> invoke(final ValueMap<Input, OWLValue> inputs, final OWLKnowledgeBase env)
 		throws ExecutionException
 	{
+		long x = System.currentTimeMillis();
+		//System.out.println("Inicio execução: " + x);
 		initWSDLOperation();
 		for (final WSDLParameter in : wsdlOperation.getInputs())
 		{
@@ -153,7 +155,7 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 
 			Object inputValueObj;
 			
-			final String xslt = mp.getTransformation();
+			final String xslt = null;//mp.getTransformation();
 			if (inputValue.isIndividual())
 			{
 				final String rdfXML = ((OWLIndividual) inputValue).toRDF(true, true);
@@ -185,6 +187,9 @@ public class WSDLAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Strin
 		}
 		try
 		{
+			long y = System.currentTimeMillis();
+			//System.out.println("Fim  do grounding: (y) " + y );
+			System.out.println("Tempo de preparação para execução do serviço: " + (y-x));
 			wsdlOperation.invoke();
 		}
 		catch(final Exception e)
