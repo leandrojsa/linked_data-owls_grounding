@@ -43,6 +43,9 @@ import org.mindswap.swrl.SWRLProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.ufba.dcc.linked_data.SparqlGroundingProvider;
+import br.ufg.inf.sws.rest.WADLGroundingProvider;
+
 
 /**
  * Global singleton registry for all {@link OWLObjectConverter}. There are two
@@ -83,6 +86,10 @@ public class OWLObjectConverterRegistry
 			JavaGroundingProvider.class, JavaGroundingProvider.DEFAULT_JAVA_GROUNDING_PROVIDER);
 		WSDLGroundingProvider wsdlGdgProvider = ServiceFinder.instance().loadImplementation(
 			WSDLGroundingProvider.class, WSDLGroundingProvider.DEFAULT_WSDL_GROUNDING_PROVIDER);
+		SparqlGroundingProvider sparqlGdgProvider = ServiceFinder.instance().loadImplementation(
+				SparqlGroundingProvider.class, SparqlGroundingProvider.DEFAULT_SPARQL_GROUNDING_PROVIDER);
+		WADLGroundingProvider wadlGdgProvider = ServiceFinder.instance().loadImplementation(
+				WADLGroundingProvider.class, WADLGroundingProvider.DEFAULT_REST_GROUNDING_PROVIDER);
 		//UPnPGroundingProvider upnpGdgProvider = ServiceFinder.instance().loadImplementation(
 		//	UPnPGroundingProvider.class, UPnPGroundingProvider.DEFAULT_UPNP_GROUNDING_PROVIDER);
 		SWRLProvider swrlProvider = ServiceFinder.instance().loadImplementation(
@@ -99,6 +106,12 @@ public class OWLObjectConverterRegistry
 
 		if (javaGdgProvider != null) javaGdgProvider.registerConverters(this);
 		else logNoImplFound(JavaGroundingProvider.class);
+		
+		if (sparqlGdgProvider != null) sparqlGdgProvider.registerConverters(this);
+		else logNoImplFound(SparqlGroundingProvider.class);
+		
+		if (wadlGdgProvider != null) wadlGdgProvider.registerConverters(this);
+		else logNoImplFound(WADLGroundingProvider.class);
 
 	//	if (upnpGdgProvider != null) upnpGdgProvider.registerConverters(this);
 	//	else logNoImplFound(UPnPGroundingProvider.class);

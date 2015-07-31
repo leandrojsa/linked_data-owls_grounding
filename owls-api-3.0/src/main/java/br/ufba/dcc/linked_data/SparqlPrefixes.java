@@ -8,7 +8,7 @@ public interface SparqlPrefixes extends OWLIndividual {
 	
 	
 
-	public void setPrefixName(final URI op);
+	public void setPrefixName(final String op);
 
 	public String getPrefixName();
 	

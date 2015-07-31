@@ -17,7 +17,7 @@ public class SparqlPrefixesImpl extends WrappedIndividual implements SparqlPrefi
 	}
 	
 
-	public void setPrefixName(final URI op) {
+	public void setPrefixName(final String op) {
 		setProperty(OWLSSparqlVocabulary.PrefixName, op);
 	}
 

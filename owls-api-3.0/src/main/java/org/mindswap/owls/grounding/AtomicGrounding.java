@@ -57,6 +57,7 @@ public interface AtomicGrounding<T> extends OWLIndividual
 	public final static String GROUNDING_UPNP = "UPNP";
 	public final static String GROUNDING_JAVA = "Java";
 	public final static String GROUNDING_SPARQL = "Sparql";
+	public final static String GROUNDING_WADL = "WADL";
 
 	/**
 	 * Get a URL that describes the properties of this grounding. The nature of

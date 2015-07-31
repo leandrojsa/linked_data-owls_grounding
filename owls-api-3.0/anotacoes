@@ -1,0 +1,25 @@
+Modificação no arquivo:
+impl.owl.CombinedOWLConverter
+
+if(!converter.toString().contains("OWL individual -> null (implemented by class impl.owls.grounding.UPnPGroundingImpl)")){
+
+Isso para evitar o erro que dá no grounding UPnPGgrounding
+
+
+Para inserir novos groundings devemos modificar os arquivos:
+
++ org.mindswap.owl.OWLObjectConverterRegistry
+
++ impl.jena.OWLModelImpl
+
++ org.mindswap.owl.OWLModel
+
++ org.mindswap.owls.grounding.AtomicGrounding
+
+
+Modificações para funcionar a composição:
+
++ impl.owl.WrappedIndividual.removeProperty(WrappedIndividual.java:312
+	acrescentei um if !null
+
+

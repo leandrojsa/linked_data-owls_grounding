@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2008 Thorsten Möller - University of Basel Switzerland
+// Copyright (c) 2008 Thorsten Mï¿½ller - University of Basel Switzerland
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to
@@ -36,10 +36,12 @@ import org.mindswap.utils.URIUtils;
  */
 public abstract class OWLS_Extensions
 {
-	public static final String baseURI = "http://on.cs.unibas.ch/owl-s/";
+	public static final String baseURI = "http://localhost/owl_s/ontology/";
 	public static final String version = OWLS_1_2.version;
-	public static final String PROCESS_NS = baseURI + version + "/OWLSExtensions.owl#";
-	public static final String TERMINATION_NS = baseURI + version + "/ProfileServiceTermination.owl#";
+	//public static final String PROCESS_NS = baseURI + version + "/OWLSExtensions.owl#";
+	//public static final String TERMINATION_NS = baseURI + version + "/ProfileServiceTermination.owl#";
+	public static final String PROCESS_NS = baseURI + "/OWLSExtensions.owl#";
+	public static final String TERMINATION_NS = baseURI + "/ProfileServiceTermination.owl#";
 
 	public static abstract class Process extends Vocabulary
 	{

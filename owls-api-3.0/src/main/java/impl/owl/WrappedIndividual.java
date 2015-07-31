@@ -309,7 +309,9 @@ public abstract class WrappedIndividual extends OWLObjectImpl implements OWLIndi
 
 	/* @see org.mindswap.owl.OWLIndividual#removeProperty(org.mindswap.owl.OWLProperty, org.mindswap.owl.OWLValue) */
 	public void removeProperty(final OWLProperty theProp, final OWLValue theValue) {
-		individual.removeProperty(theProp,theValue);
+		if(theProp != null){
+			individual.removeProperty(theProp,theValue);
+		}
 	}
 
 	/* @see org.mindswap.owl.OWLIndividual#addProperty(org.mindswap.owl.OWLObjectProperty, org.mindswap.owl.OWLIndividual) */

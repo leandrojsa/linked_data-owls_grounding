@@ -101,7 +101,6 @@ public abstract class OWLObjectImpl implements OWLObject
 		{
 			final OWLObjectConverter<T> converter = OWLObjectConverterRegistry.instance().getConverter(javaClass);
 			if (converter == null) throw new CastingException("No converter found for " + javaClass);
-
 			view = converter.cast(this, isStrictConversion());
 
 			addView(view);

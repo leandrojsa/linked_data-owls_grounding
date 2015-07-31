@@ -1,0 +1,13 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+SELECT ?nome_capital, ?populacao
+	WHERE {
+		?pais foaf:name "Brazil"@en .
+                ?pais dbpedia-owl:capital ?capital .
+                ?capital rdf:type <http://dbpedia.org/ontology/Place> .
+                ?capital foaf:name ?nome_capital .
+                ?pais rdf:type <http://dbpedia.org/ontology/Country> .
+                ?capital dbpedia-owl:populationTotal ?populacao .
+		
+	}

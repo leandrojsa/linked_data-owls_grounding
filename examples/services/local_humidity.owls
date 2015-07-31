@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+xmlns:owl       = "http://www.w3.org/2002/07/owl#"
+xmlns:rdfs      = "http://www.w3.org/2000/01/rdf-schema#"
+xmlns:rdf       = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:service   = "http://www.daml.org/services/owl-s/1.2/Service.owl#"
+xmlns:process   = "http://www.daml.org/services/owl-s/1.2/Process.owl#"
+xmlns:profile   = "http://www.daml.org/services/owl-s/1.2/Profile.owl#"
+xmlns:grounding = "http://www.daml.org/services/owl-s/1.2/Grounding.owl#"
+xmlns:sparql    = "http://localhost/owl_s/ontology/sparqlGrounding.owl#"
+xml:base        = "http://127.0.0.1/owl_s/services/1.2/isbn_book_linked_data_grounding.owls">
+
+<owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Service.owl" />
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Process.owl" />
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Profile.owl" />
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Grounding.owl" />
+    <owl:imports rdf:resource="http://127.0.0.1/owl_s/ontology/portal.owl" />
+    <owl:imports rdf:resource="http://127.0.0.1/owl_s/ontology/dbpedia_3.9.owl" />
+    <owl:imports rdf:resource="http://localhost/owl_s/restful/RESTfulGrounding.owl" />
+
+</owl:Ontology>
+
+<service:Service rdf:ID="HUMIDITY_ROOM_SERVICE">
+    <service:presents rdf:resource="#HUMIDITY_ROOM_PROFILE"/>
+    <service:describedBy rdf:resource="#HUMIDITY_ROOM_PROCESS"/>
+    <service:supports rdf:resource="#HUMIDITY_ROOM_GROUNDING"/>
+</service:Service>
+
+<profile:Profile rdf:ID="HUMIDITY_ROOM_PROFILE">
+    <service:isPresentedBy rdf:resource="#HUMIDITY_ROOM_SERVICE"/>
+    <profile:serviceName xml:lang="en">
+        HUMIDITY_ROOM_Service
+    </profile:serviceName>
+    <profile:textDescription xml:lang="en">
+        This service provides a humidity of 261 IM room.
+    </profile:textDescription>
+    <profile:hasOutput rdf:resource="#_HUMIDITY"/>
+    <profile:has_process rdf:resource="HUMIDITY_ROOM_PROCESS" />
+</profile:Profile>
+
+<!--<process:ProcessModel rdf:ID="ISBN_BOOK_PROCESS_MODEL">
+<service:describes rdf:resource="#ISBN_BOOK_SERVICE"/>
+<process:hasProcess rdf:resource="#ISBN_BOOK_PROCESS"/>
+</process:ProcessModel>-->
+
+<process:AtomicProcess rdf:ID="HUMIDITY_ROOM_PROCESS">
+    <service:describes rdf:resource="#HUMIDITY_ROOM_SERVICE"/>
+    <process:hasOutput rdf:resource="#_HUMIDITY"/>
+</process:AtomicProcess>
+
+<process:Output  rdf:ID="_HUMIDITY">
+    <process:parameterType rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://dbpedia.org/ontology/Book</process:parameterType>
+    <rdfs:label>temperature</rdfs:label>
+</process:Output>
+
+<restful:WadlGrounding rdf:ID="HUMIDITY_ROOM_GROUNDING">
+  <service:supportedBy rdf:resource="#HUMIDITY_ROOM_SERVICE"/>
+  <grounding:hasAtomicProcessGrounding rdf:resource="#HUMIDITY_ROOM_AtomicProcessGrounding"/>
+</restful:WadlGrounding>
+
+<!-- WADL Atomic Process Grounding -->
+
+<restful:WadlAtomicProcessGrounding rdf:ID="HUMIDITY_ROOM_AtomicProcessGrounding">
+  <grounding:owlsProcess rdf:resource="#HUMIDITY_ROOM_AtomicProcess"/>
+  <restful:wadlResourceMethod>
+    <restful:WadlResourceMethodRef>
+      <restful:resource rdf:datatype="&xsd;#anyURI">http://localhost/owl_s/services/wadl/temp_room.wadl#TEMP_RESC</restful:resource>
+      <restful:method rdf:datatype="&xsd;#anyURI">http://localhost/owl_s/services/wadl/temp_room.wadl#TEMP_GET</restful:method>
+    </restful:WadlResourceMethodRef>
+  </restful:wadlResourceMethod>
+  <restful:wadlVersion rdf:datatype="&xsd;#anyURI">
+    https://wadl.dev.java.net/wadl20090202.xsd
+  </restful:wadlVersion>
+  <restful:wadlDocument rdf:datatype="&xsd;#anyURI">
+    http://localhost/owl_s/services/wadl/temp_room.wadl
+  </restful:wadlDocument>
+
+  <!-- Response Parameters -->
+
+  <restful:wadlResponseParam>
+    <restful:WadlResponseParamMap>
+      <grounding:owlsParameter rdf:resource="#_HUMIDITY"/>
+      <restful:wadlMessageParam rdf:datatype="&xsd;#anyURI">http://localhost/owl_s/services/wadl/temp_room.wadl#TEMP</restful:wadlMessageParam>
+    </restful:WadlResponseParamMap>
+  </restful:wadlResponseParam>
+
+</restful:WadlAtomicProcessGrounding>
+
+
+
+</rdf:RDF>

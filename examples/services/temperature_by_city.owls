@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+xmlns:owl       = "http://www.w3.org/2002/07/owl#"
+xmlns:rdfs      = "http://www.w3.org/2000/01/rdf-schema#"
+xmlns:rdf       = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:service   = "http://www.daml.org/services/owl-s/1.2/Service.owl#"
+xmlns:process   = "http://www.daml.org/services/owl-s/1.2/Process.owl#"
+xmlns:profile   = "http://www.daml.org/services/owl-s/1.2/Profile.owl#"
+xmlns:grounding = "http://www.daml.org/services/owl-s/1.2/Grounding.owl#"
+xmlns:sparql    = "http://localhost/owl_s/ontology/sparqlGrounding.owl#"
+xml:base        = "http://127.0.0.1/owl_s/services/1.2/temperature_by_city_grounding.owls">
+
+<owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Service.owl" />
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Process.owl" />
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Profile.owl" />
+    <owl:imports rdf:resource="http://www.daml.org/services/owl-s/1.2/Grounding.owl" />
+    <owl:imports rdf:resource="http://127.0.0.1/owl_s/ontology/portal.owl" />
+    <owl:imports rdf:resource="http://127.0.0.1/owl_s/ontology/dbpedia_3.9.owl" />
+    <owl:imports rdf:resource="http://localhost/owl_s/ontology/sparqlGrounding.owl" />
+
+</owl:Ontology>
+
+<service:Service rdf:ID="MEAN_TEMP_CITY_SERVICE">
+    <service:presents rdf:resource="#MEAN_TEMP_CITY_PROFILE"/>
+    <service:describedBy rdf:resource="#MEAN_TEMP_CITY_PROCESS"/>
+    <service:supports rdf:resource="#MEAN_TEMP_CITY_GROUNDING"/>
+</service:Service>
+
+<profile:Profile rdf:ID="MEAN_TEMP_CITY_PROFILE">
+    <service:isPresentedBy rdf:resource="#MEAN_TEMP_CITY_SERVICE"/>
+    <profile:serviceName xml:lang="en">
+        MeanTemperatureByCityService
+    </profile:serviceName>
+    <profile:textDescription xml:lang="en">
+        This service provides a mean temperature of city.
+    </profile:textDescription>
+    <profile:hasInput  rdf:resource="#_CITY"/>
+    <profile:hasInput  rdf:resource="#_COUNTRY"/>
+    <profile:hasOutput rdf:resource="#_TEMPERATURE"/>
+    <profile:has_process rdf:resource="MEAN_TEMP_CITY_PROCESS" />
+</profile:Profile>
+
+<!--<process:ProcessModel rdf:ID="ISBN_BOOK_PROCESS_MODEL">
+<service:describes rdf:resource="#ISBN_BOOK_SERVICE"/>
+<process:hasProcess rdf:resource="#ISBN_BOOK_PROCESS"/>
+</process:ProcessModel>-->
+
+<process:AtomicProcess rdf:ID="MEAN_TEMP_CITY_PROCESS">
+    <service:describes rdf:resource="#MEAN_TEMP_CITY_SERVICE"/>
+    <process:hasInput  rdf:resource="#_CITY"/>
+    <process:hasInput  rdf:resource="#_COUNTRY"/>
+    <process:hasOutput rdf:resource="#_TEMPERATURE"/>
+</process:AtomicProcess>
+
+<process:Input rdf:ID="_CITY">
+    <process:parameterType rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://dbpedia.org/ontology/Place</process:parameterType>
+    <rdfs:label>city</rdfs:label>
+</process:Input>
+
+<process:Input rdf:ID="_COUNTRY">
+    <process:parameterType rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://dbpedia.org/ontology/country</process:parameterType>
+    <rdfs:label>country</rdfs:label>
+</process:Input>
+
+<process:Output  rdf:ID="_TEMPERATURE">
+    <process:parameterType rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://dbpedia.org/property/yearMeanC</process:parameterType>
+    <rdfs:label>temperature</rdfs:label>
+</process:Output>
+
+<sparql:SparqlGrounding rdf:ID="MEAN_TEMP_CITY_GROUNDING">
+  <service:supportedBy rdf:resource="#MEAN_TEMP_CITY_SERVICE"/>
+  <grounding:hasAtomicProcessGrounding rdf:resource="#MEAN_TEMP_CITY_AtomicProcessGrounding"/>
+</sparql:SparqlGrounding>
+
+<!-- SPARQL Atomic Process Grounding -->
+
+<sparql:SparqlAtomicProcessGrounding rdf:ID="MEAN_TEMP_CITY_AtomicProcessGrounding">
+  <grounding:owlsProcess rdf:resource="#MEAN_TEMP_CITY_PROCESS"/>  
+  
+  <sparql:sparqlVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">
+    http://www.w3.org/TR/rdf-sparql-query/
+  </sparql:sparqlVersion>
+  <sparql:sparqlEndPoint rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://dbpedia.org/sparql</sparql:sparqlEndPoint>
+  
+  <!-- Prefixies -->
+   
+  <sparql:SparqlPrefixes>
+    <sparql:SparqlPrefixMap>
+        <sparql:PrefixName>rdf</sparql:PrefixName>
+        <sparql:PrefixUri>http://www.w3.org/1999/02/22-rdf-syntax-ns#</sparql:PrefixUri>                
+    </sparql:SparqlPrefixMap>    
+  </sparql:SparqlPrefixes>
+  
+   <sparql:SparqlPrefixes>
+    <sparql:SparqlPrefixMap>
+        <sparql:PrefixName>dbpedia-owl</sparql:PrefixName>
+        <sparql:PrefixUri>http://dbpedia.org/ontology/</sparql:PrefixUri>                
+    </sparql:SparqlPrefixMap>    
+  </sparql:SparqlPrefixes>
+  
+  <sparql:SparqlPrefixes>
+    <sparql:SparqlPrefixMap>
+        <sparql:PrefixName>dbpprop</sparql:PrefixName>
+        <sparql:PrefixUri>http://dbpedia.org/property/</sparql:PrefixUri>                
+    </sparql:SparqlPrefixMap>    
+  </sparql:SparqlPrefixes>
+  
+  <sparql:SparqlPrefixes>
+    <sparql:SparqlPrefixMap>
+        <sparql:PrefixName>foaf</sparql:PrefixName>
+        <sparql:PrefixUri>http://xmlns.com/foaf/0.1/</sparql:PrefixUri>                
+    </sparql:SparqlPrefixMap>    
+  </sparql:SparqlPrefixes>
+ 
+
+  <!-- Input Parameters -->
+
+  <sparql:SparqlInputParam>
+    <sparql:SparqlInputParamMap>
+      <grounding:owlsParameter rdf:resource="#_CITY"/>
+      <sparql:SparqlDataParam rdf:datatype="http://www.w3.org/2001/XMLSchema#string">?city_name</sparql:SparqlDataParam>
+    </sparql:SparqlInputParamMap>
+  </sparql:SparqlInputParam>
+  
+   <sparql:SparqlInputParam>
+    <sparql:SparqlInputParamMap>
+      <grounding:owlsParameter rdf:resource="#_COUNTRY"/>
+      <sparql:SparqlDataParam rdf:datatype="http://www.w3.org/2001/XMLSchema#string">?country_name</sparql:SparqlDataParam>
+    </sparql:SparqlInputParamMap>
+  </sparql:SparqlInputParam>
+
+  <!-- Ouput Parameters -->
+
+  <sparql:SparqlOutputParam>
+    <sparql:SparqlOutputParamMap>
+      <grounding:owlsParameter rdf:resource="#_TEMPERATURE"/>
+      <sparql:SparqlDataParam rdf:datatype="http://www.w3.org/2001/XMLSchema#string">?temp</sparql:SparqlDataParam>
+    </sparql:SparqlOutputParamMap>
+  </sparql:SparqlOutputParam>
+  
+ 
+  <!-- Triples -->
+  
+  <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?city</sparql:TripleSubject>
+        <sparql:TriplePredicate>rdf:type</sparql:TriplePredicate>
+        <sparql:TripleObject>dbpedia-owl:Place</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+  
+  <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?city</sparql:TripleSubject>
+        <sparql:TriplePredicate>dbpprop:name</sparql:TriplePredicate>
+        <sparql:TripleObject>?city_name</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+  
+    <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?city</sparql:TripleSubject>
+        <sparql:TriplePredicate>dbpedia-owl:country</sparql:TriplePredicate>
+        <sparql:TripleObject>?country</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+  
+  <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?country</sparql:TripleSubject>
+        <sparql:TriplePredicate>foaf:name</sparql:TriplePredicate>
+        <sparql:TripleObject>?country_name</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+  
+    <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?city</sparql:TripleSubject>
+        <sparql:TriplePredicate>dbpprop:yearMeanC</sparql:TriplePredicate>
+        <sparql:TripleObject>?temp</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+
+
+</sparql:SparqlAtomicProcessGrounding>
+
+</rdf:RDF>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://wadl.dev.java.net/2009/02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://wadl.dev.java.net/2009/02 wadl.xsd">
+	<grammars></grammars>
+	<resources base="http://service-rasp1.wisergroup.tk/cxf/temp">
+		<resource path="/devices/sensor/temperature" id="TEMP_RESC">
+			<method name="GET" id="TEMP_GET">
+				<response>
+					<representation mediaType="application/json" id="TEMP"/>
+				</response>
+			</method>
+		</resource>
+	</resources>
+</application>

@@ -55,11 +55,15 @@ public class RunLinkedDataService {
 			long time_end_process_execution=0;
 			// Carregando ontologias que descrevem o serviço
 			//URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/isbn_book_service.owls");
-			URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/isbn_book_linked_data_grounding.owls");
+			//URI uri = new URI("http://127.0.0.1/owl_s/services/1.2/isbn_book_linked_data_grounding.owls");
+			//URI uri = new URI("http://localhost/owl_s/services/1.2/country_population_capital_SWoDs.owls");
+			//URI uri = new URI("http://localhost/owl_s/services/1.2/temperature_by_city.owls");
+			URI uri = new URI("http://localhost/owl_s/services/1.2/humidity_by_city.owls");
+			
 			Service service = kb.readService(uri);
 			RunLinkedDataService.d = time_start_process_execution=System.currentTimeMillis();
-			System.out.println("Inicio do Grounding SPAQRL: " + (RunLinkedDataService.d- RunLinkedDataService.c));
-			System.out.println("Leitura inicial do serviço (antes do Process execute): " + (time_start_process_execution- time_start));
+			//System.out.println("Inicio do Grounding SPAQRL: " + (RunLinkedDataService.d- RunLinkedDataService.c));
+			//System.out.println("Leitura inicial do serviço (antes do Process execute): " + (time_start_process_execution- time_start));
 			
 			//System.out.println(service.getGrounding());
 			ProcessExecutionEngine exec = OWLSFactory.createExecutionEngine();
@@ -68,8 +72,8 @@ public class RunLinkedDataService {
 			//System.out.println(service.getGrounding());
 			// Definindo entradas
 			ValueMap<Input, OWLValue> inputs = new ValueMap<Input, OWLValue>();
-			inputs.setValue(process.getInput("_ISBN"), kb.createDataValue("'ISBN 0-375-50137-1 (1st ed hardcover)'@en"));
-			
+			inputs.setValue(process.getInput("_COUNTRY"), kb.createDataValue("'Brazil'@en"));
+			inputs.setValue(process.getInput("_CITY"), kb.createDataValue("'Salvador'@en"));			
 			//inputs.setValue(process.getInput("YNS-AppID"), kb.createDataValue("YahooDemo"));
 			//inputs.setValue(process.getInput("YNS-Query"), kb.createDataValue("Brasil"));
 			

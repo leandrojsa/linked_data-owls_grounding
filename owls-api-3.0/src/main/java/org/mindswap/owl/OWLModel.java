@@ -93,6 +93,10 @@ import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
 import br.ufba.dcc.linked_data.SparqlGrounding;
 import br.ufba.dcc.linked_data.SparqlPrefixes;
 import br.ufba.dcc.linked_data.SparqlTriples;
+import br.ufg.inf.sws.rest.WADLAtomicGrounding;
+import br.ufg.inf.sws.rest.WADLGrounding;
+import br.ufg.inf.sws.rest.WADLResourceMethodRef;
+import br.ufg.inf.sws.rest.impl.TransformationFileMap;
 
 /**
  * A OWLModel is the data structure to manage a set of OWL axioms and assertions.
@@ -1048,6 +1052,12 @@ public interface OWLModel {
 	public SparqlTriples createSparqlTriples(URI uri);
 	public MessageMap<String> createSparqlInputParamMap(URI uri);
 	public MessageMap<String> createSparqlOutputParamMap(URI uri);
+	
+	public WADLAtomicGrounding createWADLAtomicGrounding(URI uri);
+	public WADLGrounding createWADLGrounding(URI uri);
+	public MessageMap<TransformationFileMap> createWADLRequestParamMap(URI uri);
+	public MessageMap<TransformationFileMap> createWADLResponseParamMap(URI uri);
+	public WADLResourceMethodRef createWADLResourceMethodRef(URI uri);
 
 
 	public ValueConstant createValueConstant(OWLValue constantValue, Binding<?> enclosingBinding);

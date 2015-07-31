@@ -60,7 +60,8 @@ import org.mindswap.utils.URIUtils;
  */
 public abstract class OWLS_1_2 extends Vocabulary
 {
-	public static final String base = OWLS_1_0.base;
+	//public static final String base = OWLS_1_0.base;
+	public static final String base = "http://localhost/owl_s/";
 	public static final String version = "1.2";
 	public static final String URI = base + version + "/";
 
@@ -79,7 +80,7 @@ public abstract class OWLS_1_2 extends Vocabulary
 	//public static final String SERVICE_CATEGORY_NS = URI + "ServiceCategory.owl#";
 	public static final String SERVICE_CATEGORY_NS = "http://www.ai.sri.com/daml/services/owl-s/1.2/ServiceCategory.owl#";
 	//public static final String SERVICE_PARAMETER_NS = URI + "ServiceParameter.owl#";
-	public static final String SERVICE_PARAMETER_NS = "http://www.ai.sri.com/daml/services/owl-s/1.2/ServiceParameter.owl#";
+	public static final String SERVICE_PARAMETER_NS = "http://localhost/owl_s/ontology/ServiceParameter.owl#";
 	
 
 	// helpers - do not directly belong to OWL-S but are imported by some of the ontologies
@@ -117,7 +118,6 @@ public abstract class OWLS_1_2 extends Vocabulary
 		static
 		{
 			final OWLOntology ont = loadOntology(SERVICE_NS);
-
 			Service = ont.getClass(URIUtils.createURI(SERVICE_NS + "Service"));
 			ServiceProfile = ont.getClass(URIUtils.createURI(SERVICE_NS + "ServiceProfile"));
 			ServiceModel = ont.getClass(URIUtils.createURI(SERVICE_NS + "ServiceModel"));

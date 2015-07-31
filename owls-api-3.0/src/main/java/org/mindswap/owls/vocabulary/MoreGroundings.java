@@ -42,9 +42,10 @@ import org.mindswap.utils.URIUtils;
  */
 public abstract class MoreGroundings
 {
-	public static final String baseURI = "http://on.cs.unibas.ch/owl-s/";
+	public static final String baseURI = "http://localhost/owl_s/ontology";
 	public static final String version = OWLS_1_2.version;
-	public static final String JAVA_GRDG_NS = baseURI + version + "/MoreGroundings.owl#";
+	//public static final String JAVA_GRDG_NS = baseURI + version + "/MoreGroundings.owl#";
+	public static final String JAVA_GRDG_NS = baseURI + "/MoreGroundings.owl#";
 
 	public static abstract class Java extends Vocabulary
 	{

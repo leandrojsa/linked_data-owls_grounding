@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE uridef[
+  <!ENTITY rdf       "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs      "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY xsd       "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY owl       "http://www.w3.org/2002/07/owl">
+  <!ENTITY grounding "http://daml.org/services/owl-s/1.2/Grounding.owl"> 
+  <!ENTITY sparql "http://localhost/owl_s/ontology/sparqlGrounding.owl" >
+  <!ENTITY isbn-book       "http://localhost/owl_s/services/1.2/isbn_book_service.owl">
+  <!ENTITY DEFAULT   "http://localhost/owl_s/services/1.2/isbn_book_grounding.owl">
+]>
+
+<rdf:RDF
+  xmlns:rdf      ="&rdf;#"
+  xmlns:rdfs     ="&rdfs;#"
+  xmlns:xsd      ="&xsd;#"
+  xmlns:owl      ="&owl;#"
+  xmlns:grounding="&grounding;#"
+  xmlns:sparql  ="&sparql;#"
+  xmlns:isbn-book ="&isbn-book;#"
+  xmlns          ="&DEFAULT;#"
+  xml:base       ="&DEFAULT;"
+>
+
+<!-- Ontology -->
+
+<owl:Ontology rdf:about="">
+  <rdfs:comment> 
+    This ontology represents the OWL-S service grounding a service that has a input a isbn book and output a book resource uri
+  </rdfs:comment>
+  <owl:imports rdf:resource="&grounding;"/>
+  <owl:imports rdf:resource="&sparql;"/>
+  <owl:imports rdf:resource="&isbn-book;"/>
+</owl:Ontology>
+
+<!-- SPARQL Grounding -->
+
+<sparql:SparqlGrounding rdf:ID="ISBN_Book-Grounding">
+  <grounding:hasAtomicProcessGrounding rdf:resource="#ISBN_Book-AtomicProcessGrounding"/>
+</sparql:SparqlGrounding>
+
+<!-- SPARQL Atomic Process Grounding -->
+
+<sparql:SparqlAtomicProcessGrounding rdf:ID="ISBN_Book-AtomicProcessGrounding">
+  <grounding:owlsProcess rdf:resource="&isbn-book;#ISBN_BOOK_PROCESS"/>  
+  
+  <sparql:sparqlVersion rdf:datatype="&xsd;#anyURI">
+    http://www.w3.org/TR/rdf-sparql-query/
+  </sparql:sparqlVersion>
+  <sparql:sparqlEndPoint rdf:datatype="&xsd;#anyURI">
+    http://dbpedia.org/sparql
+  </sparql:sparqlEndPoint>
+  
+  <!-- Prefixies -->
+  
+  <sparql:SparqlPrefixies>
+    <sparql:SparqlPrefixMap>
+        <sparql:PrefixName>http://www.w3.org/1999/02/22-rdf-syntax-ns#</sparql:PrefixName>
+        <sparql:PrefixUri>rdf</sparql:PrefixUri>                
+    </sparql:SparqlPrefixMap>    
+  </sparql:SparqlPrefixies>
+  
+
+  <!-- Input Parameters -->
+
+  <sparql:SparqlInputParam>
+    <sparql:SparqlInputParamMap>
+      <grounding:owlsParameter rdf:resource="&isbn-book;#_ISBN"/>
+      <sparql:SparqlDataParam rdf:datatype="&xsd;#string">?var_isbn</sparql:SparqlDataParam>
+    </sparql:SparqlInputParamMap>
+  </sparql:SparqlInputParam>
+
+  <!-- Ouput Parameters -->
+
+  <sparql:SparqlOutputParam>
+    <sparql:SparqlOutputParamMap>
+      <grounding:owlsParameter rdf:resource="&isbn-book;#_BOOK"/>
+      <sparql:SparqlDataParam rdf:datatype="&xsd;#string">?var_book</sparql:SparqlDataParam>
+    </sparql:SparqlOutputParamMap>
+  </sparql:SparqlOutputParam>
+  
+  <!-- Triples -->
+  
+  <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?var_book</sparql:TripleSubject>
+        <sparql:TriplePredicate>rdf:type</sparql:TriplePredicate>
+        <sparql:TripleObject>http://dbpedia.org/ontology/Book</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+  
+  <sparql:SparqlTriples>
+    <sparql:SparqlTripleMap>
+        <sparql:TripleSubject>?var_book</sparql:TripleSubject>
+        <sparql:TriplePredicate>http://dbpedia.org/ontology/isbn</sparql:TriplePredicate>
+        <sparql:TripleObject>?var_isbn</sparql:TripleObject>               
+    </sparql:SparqlTripleMap>    
+  </sparql:SparqlTriples>
+
+
+</sparql:SparqlAtomicProcessGrounding>
+</rdf:RDF>

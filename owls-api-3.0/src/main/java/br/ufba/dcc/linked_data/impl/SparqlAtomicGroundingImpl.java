@@ -21,9 +21,12 @@ import org.mindswap.owl.OWLValue;
 import org.mindswap.owls.grounding.AtomicGrounding;
 import org.mindswap.owls.grounding.Grounding;
 import org.mindswap.owls.grounding.MessageMap;
+import org.mindswap.owls.grounding.WSDLOperationRef;
 import org.mindswap.owls.grounding.MessageMap.StringMessageMap;
 import org.mindswap.owls.process.variable.Input;
 import org.mindswap.owls.process.variable.Output;
+import org.mindswap.owls.vocabulary.OWLS;
+import org.mindswap.owls.vocabulary.MoreGroundings.Java;
 import org.mindswap.query.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
 
 import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
 import br.ufba.dcc.linked_data.SparqlGrounding;
@@ -60,10 +64,34 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 		return getPropertyAsURI(OWLSSparqlVocabulary.sparqlEndPoint);
 	}
 	
+	public void setSparqlEndPoint(URI uri){
+		setProperty(OWLSSparqlVocabulary.sparqlEndPoint, uri);
+	}
+	
 	public List<SparqlPrefixes> getPrefixes() {
 		return getPropertiesAs(OWLSSparqlVocabulary.SparqlPrefixes, SparqlPrefixes.class);
 	}
+	
+	public void addPrefix(OWLIndividual value){		
+		addProperty(OWLSSparqlVocabulary.SparqlPrefixes, value);
+	}
+	
+	
+	
+	public void setInputMessage(final MessageMap<String> map) {
+		addInputMap(map);
+	}
+	
+/*	
+	public void addInputMap(final URI uri, final String type, final int index, final Input owlsParameter)
+	{
+		final OWLIndividual ind = getOntology().createInstance(OWLSSparqlVocabulary.SparqlInputParamMap, uri);
 
+		ind.setProperty(Java.javaType, type);
+		ind.setProperty(OWLSSparqlVocabulary.SparqlDataParam, owlsParameter);
+		addProperty(Java.hasJavaParameter, ind);
+	}
+*/
 	public StringBuffer buildPrexies(){
 		StringBuffer prefixes_str = new StringBuffer();
 		List<SparqlPrefixes> prefixes = getPrefixes();
@@ -79,6 +107,10 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 	
 	public List<SparqlTriples> getTriples() {
 		return getPropertiesAs(OWLSSparqlVocabulary.SparqlTriples, SparqlTriples.class);
+	}
+	
+	public void addTriple(OWLIndividual value){
+		addProperty(OWLSSparqlVocabulary.SparqlTriples, value);
 	}
 	
 	public List<Vector<String>> buildTriples(){
@@ -169,16 +201,17 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 		Iterator<Entry<Input, OWLValue>> i = inputs.iterator();
 		while(i.hasNext()){
 			Entry<Input, OWLValue> input = i.next();
+			System.out.println("OPA: " + input.getValue().toString());
 			for (final Input inputParam : getProcess().getInputs()){
 				final MessageMap<String> mp = getMessageMap(inputParam);
 				final String var = mp.getGroundingParameter();
-				//System.out.println(var);
 				Iterator<Vector<String>> t = l_triples.iterator();
 				while(t.hasNext()){
 					Vector<String> triple = t.next();
 					for(int j=0; j<3; j++){
 						if (triple.get(j).contentEquals(var)){
-							triple.set(j, input.getValue().toString());							
+							System.out.println("VAR: " + var + "OPA: " + input.getValue().toString());
+							triple.set(j, input.getValue().toString());
 						}
 					}
 					
@@ -196,27 +229,35 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			query = query + triple.get(0) + " " + triple.get(1) + " " + triple.get(2) + " .\n";
 		}		
 		query = query + "}";
-		//System.out.println(query);
+		System.out.println(query);
 		//String q = "PREFIX foaf:  <http://xmlns.com/foaf/0.1/> \n SELECT ?name ?person \n WHERE {\n ?person foaf:name ?name .\n} LIMIT 3";
-		Query sparqlQuery = QueryFactory.create(query);
+		Query sparqlQuery = QueryFactory.create(query + "LIMIT 1");
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(getSparqlEndPoint().toString(), sparqlQuery);
 		//QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
 		long y = System.currentTimeMillis();
 		//System.out.println("Fim  do grounding: (y) " + y );
 		System.out.println("Tempo de preparação para execução do serviço: " + (y-x));
+		System.out.println(query + "LIMIT 1");
 		ResultSet result = qexec.execSelect() ;
-		qexec.close() ;
+		ResultSetFormatter.out(System.out, result);
+		System.out.println(result.next().get("populacao"));
+		final ValueMap<Output, OWLValue> results = new ValueMap<Output, OWLValue>();
+		//fix after
+		
+		//end
 		
 		//build output
-		final ValueMap<Output, OWLValue> results = new ValueMap<Output, OWLValue>();
+		
 		for (final Output outputParam : getProcess().getOutputs()){
+			ResultSet tempResult = result;
 			final MessageMap<String> mp = getMessageMap(outputParam);
 			final String outputVar = mp.getGroundingParameter();
-			while(result.hasNext()){
-				QuerySolution r = result.next();
+			System.out.println("output: " + outputVar );
+			while(tempResult.hasNext()){
+				QuerySolution r = tempResult.next();
 				Object outputValue = r.get(outputVar);
 				//System.out.println(outputParam.getParamType());
-				results.setValue(outputParam, env.createDataValue(outputValue));
+				
 				//if (outputParam.getParamType().isDataType())
 				//	results.setValue(outputParam, env.createDataValue(outputValue));
 				//else
@@ -224,7 +265,7 @@ public class SparqlAtomicGroundingImpl extends MessageMapAtomicGroundingImpl<Str
 			}
 			//System.out.println(outputVar);
 		}
-		
+		qexec.close() ;
 		return results;
 	}
 	

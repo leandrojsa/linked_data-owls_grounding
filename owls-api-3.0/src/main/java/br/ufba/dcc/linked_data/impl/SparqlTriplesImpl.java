@@ -17,7 +17,7 @@ public class SparqlTriplesImpl extends WrappedIndividual implements SparqlTriple
 	}
 	
 
-	public void setTripleSubject(final URI op) {
+	public void setTripleSubject(final String op) {
 		setProperty(OWLSSparqlVocabulary.TripleSubject, op);
 	}
 
@@ -25,7 +25,7 @@ public class SparqlTriplesImpl extends WrappedIndividual implements SparqlTriple
 		return getPropertyAsString(OWLSSparqlVocabulary.TripleSubject);
 	}
 	
-	public void setTriplePredicate(final URI op) {
+	public void setTriplePredicate(final String op) {
 		setProperty(OWLSSparqlVocabulary.TriplePredicate, op);
 	}
 
@@ -33,7 +33,7 @@ public class SparqlTriplesImpl extends WrappedIndividual implements SparqlTriple
 		return getPropertyAsString(OWLSSparqlVocabulary.TriplePredicate);
 	}
 	
-	public void setTripleObject(final URI op) {
+	public void setTripleObject(final String op) {
 		setProperty(OWLSSparqlVocabulary.TripleObject, op);
 	}
 

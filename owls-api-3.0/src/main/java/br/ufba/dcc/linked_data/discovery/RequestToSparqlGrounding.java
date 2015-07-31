@@ -1,11 +1,14 @@
 package br.ufba.dcc.linked_data.discovery;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,21 +19,30 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-
 import org.mindswap.owl.OWLDataValue;
 import org.mindswap.owl.OWLFactory;
 import org.mindswap.owl.OWLKnowledgeBase;
 import org.mindswap.owl.OWLProperty;
 import org.mindswap.owl.OWLValue;
+import org.mindswap.owl.OWLWriter;
+import org.mindswap.owls.grounding.MessageMap;
+import org.mindswap.owls.process.AtomicProcess;
 import org.mindswap.owls.process.variable.Input;
 import org.mindswap.owls.process.variable.Output;
+import org.mindswap.owls.profile.Profile;
 import org.mindswap.owls.service.Service;
+import org.mindswap.owls.vocabulary.OWLS;
 import org.mindswap.owls.vocabulary.OWLS_1_2.Grounding;
 import org.mindswap.utils.URIUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import br.ufba.dcc.linked_data.SparqlAtomicGrounding;
+import br.ufba.dcc.linked_data.SparqlGrounding;
+import br.ufba.dcc.linked_data.SparqlPrefixes;
+import br.ufba.dcc.linked_data.SparqlTriples;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -50,13 +62,16 @@ import com.hp.hpl.jena.vocabulary.XSD;
 
 public class RequestToSparqlGrounding {
 
-	private Service service;
+	private org.mindswap.owl.OWLOntology ontSWoDS;
+	private Service service, SWoDS;
 	private List<Input> inputs;
 	private List<Output> outputs;
 	private String sparqlQuery;
 	private OntModel modelJena;
 	private List<NodeList> inputResources;
 	private List<NodeList> outputResources;
+	
+	public String baseURI = "http://localhost/owl_s/services/1.2/SWoDS__CITY__DESCRIPTION__POPULATION.owls#";
 	
 	public RequestToSparqlGrounding(List<Input> inputs, List<Output> outputs) throws SAXException, ParserConfigurationException, XPathExpressionException{
 		long time_start = System.currentTimeMillis();
@@ -74,7 +89,7 @@ public class RequestToSparqlGrounding {
 		this.inputs = inputs;
 		this.outputs = outputs;
 		
-		try {	
+		try {
 		
 			String filename = "/home/leandrojsa/Mestrado/Dissertação/dbpedia/properties_by_class.xml";
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -378,6 +393,28 @@ public class RequestToSparqlGrounding {
 	
 	private void buildSparqlQueryOuput(){
 		
+		//things to create a SWoDS		
+		OWLKnowledgeBase kb;			
+		kb = OWLFactory.createKB();
+		this.ontSWoDS = kb.createOntology(URIUtils.createURI(baseURI));
+		this.SWoDS = this.ontSWoDS.createService(URIUtils.createURI(baseURI + "SWoDS_Service"));
+	    AtomicProcess process = this.ontSWoDS.createAtomicProcess(URIUtils.createURI(baseURI + "SWoDS_Process"));
+	    Profile profile = this.ontSWoDS.createProfile(URIUtils.createURI(baseURI + "SWoDS_Profile"));     
+	    SparqlGrounding aGrounding = this.ontSWoDS.createSparqlGrounding(URIUtils.createURI(baseURI + "TestGrounding"));
+	    
+	    SparqlAtomicGrounding atomicGrounding = this.ontSWoDS.createSparqlAtomicGrounding(URIUtils.createURI(baseURI +"TestAtomicGrounding"));
+	    atomicGrounding.setSparqlEndPoint(URIUtils.createURI("http://dbpedia.org/sparql"));
+	    atomicGrounding.setProcess(process);
+	    
+	    SparqlPrefixes sparqlPrefix = this.ontSWoDS.createSparqlPrefixes(URIUtils.createURI(baseURI + "RDFPrefix"));
+	    sparqlPrefix.setPrefixName("rdf");
+	    sparqlPrefix.setPrefixUri(URIUtils.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
+	    atomicGrounding.addPrefix(sparqlPrefix);
+	    
+	    List<SparqlTriples> lTriple;
+	    lTriple = new ArrayList<SparqlTriples>();
+		//end
+		
 		StringBuffer prefix = new StringBuffer();
 		prefix.append("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n");
 		StringBuffer ask = new StringBuffer();
@@ -395,7 +432,31 @@ public class RequestToSparqlGrounding {
 			//prefix.append("<" + this.inputs.get(i).getParamType().getURI() + ">\n");
 			
 			String variable = "?var_" + this.inputs.get(i).getLocalName().toLowerCase();
-			whereInputs.add(i, "<" +this.inputs.get(i).getParamType().getURI() + "> " + variable + " .\n");	
+			
+			//add triple to SWoDS
+			SparqlTriples otriple = this.ontSWoDS.createSparqlTriples(URIUtils.createURI(baseURI +"oTriple_"+this.inputs.get(i).getLocalName().toLowerCase()));
+			otriple.setTriplePredicate("<" + this.inputs.get(i).getParamType().getURI() + ">");
+			otriple.setTripleObject(variable);
+			lTriple.add(i, otriple);
+			//end
+			
+			//add input to SWoDS
+			Input newInput = this.ontSWoDS.createInput(URIUtils.createURI("Input" + i));
+			newInput.setLabel(inputs.get(i).getLabel(null), null);
+			newInput.setProperty(OWLS.Process.parameterType, this.inputs.get(i).getParamType().getURI());	
+	        //newInput.setParamType(inputs.get(i).getParamType());
+			newInput.setProcess(process);	    	
+	    	profile.addInput(newInput);
+	    	process.addInput(newInput);
+	    	MessageMap<String> inputMap = this.ontSWoDS.createSparqlInputParamMap(URIUtils.createURI("InputMap" + i));
+	    	inputMap.setGroundingParameter(variable);
+	    	inputMap.setOWLSParameter(newInput);
+		    atomicGrounding.addInputMap(inputMap);
+			//end
+			
+			whereInputs.add(i, "<" +this.inputs.get(i).getParamType().getURI() + "> " + variable + " .\n");
+			
+			
 			
 		}
 		
@@ -407,6 +468,28 @@ public class RequestToSparqlGrounding {
 
 			String variable = "?var_" + this.outputs.get(i).getLocalName().toLowerCase();
 			
+			//add triple to SWoDS
+			SparqlTriples triple = this.ontSWoDS.createSparqlTriples(URIUtils.createURI(baseURI + "Triple_" + this.inputs.get(i).getLocalName().toLowerCase()));
+		    triple.setTripleSubject(variable);
+		    triple.setTriplePredicate("rdf:type");
+		    triple.setTripleObject("<" + this.outputs.get(i).getParamType().getURI() + ">");
+		    atomicGrounding.addTriple(triple);
+			//end
+		    
+		  //add output to SWoDS
+			Output newOutput = this.ontSWoDS.createOutput(URIUtils.createURI("Output" + i));
+			newOutput.setLabel(outputs.get(i).getLabel(null), null);
+			newOutput.setProperty(OWLS.Process.parameterType, this.outputs.get(i).getParamType().getURI());	
+	        //newInput.setParamType(inputs.get(i).getParamType());
+			newOutput.setProcess(process);	    	
+	    	profile.addOutput(newOutput);
+	    	process.addOutput(newOutput);
+	    	MessageMap<String> outputMap = this.ontSWoDS.createSparqlOutputParamMap(URIUtils.createURI("OutputMap" + i));
+	    	outputMap.setGroundingParameter(variable);
+	    	outputMap.setOWLSParameter(newOutput);
+		    atomicGrounding.addOutputMap(outputMap);
+			//end
+			
 			where.append(variable + " rdf:type " + "<" + this.outputs.get(i).getParamType().getURI() + "> .\n" );
 			
 			NodeList properties = this.outputResources.get(i);		
@@ -416,6 +499,13 @@ public class RequestToSparqlGrounding {
 				for(int z=0; z < properties.getLength(); z++){
 	    			Element e = (Element)properties.item(z);
 	    			if(e.getAttribute("uri").contains(input_ontology)){
+	    				
+	    				//add triple to SWoDS
+	    				SparqlTriples otriple = lTriple.get(j);
+						otriple.setTripleSubject(variable);
+						atomicGrounding.addTriple(otriple);
+	    				//end
+	    				
 	    				where.append(variable + " " + whereInputs.get(j));
 	    			}
 	    		}
@@ -424,6 +514,10 @@ public class RequestToSparqlGrounding {
 		
 		where.append("}\n");
 		
+		this.SWoDS.addProfile(profile);
+		this.SWoDS.setProcess(process);
+	    aGrounding.addGrounding(atomicGrounding);
+	    this.SWoDS.addGrounding(aGrounding);
 		
 		this.sparqlQuery = (prefix.toString() + ask.toString() + where.toString());
 		System.out.println(this.sparqlQuery);
@@ -431,6 +525,28 @@ public class RequestToSparqlGrounding {
 	}
 	
 	private void buildSparqlQueryInput(){
+		
+		//things to create a SWoDS		
+		OWLKnowledgeBase kb;			
+		kb = OWLFactory.createKB();
+		this.ontSWoDS = kb.createOntology(URIUtils.createURI(baseURI));
+		this.SWoDS = this.ontSWoDS.createService(URIUtils.createURI(baseURI + "SWoDS_Service"));
+	    AtomicProcess process = this.ontSWoDS.createAtomicProcess(URIUtils.createURI(baseURI + "SWoDS_Process"));
+	    Profile profile = this.ontSWoDS.createProfile(URIUtils.createURI(baseURI + "SWoDS_Profile"));    
+	    SparqlGrounding aGrounding = this.ontSWoDS.createSparqlGrounding(URIUtils.createURI(baseURI + "TestGrounding"));
+	    
+	    SparqlAtomicGrounding atomicGrounding = this.ontSWoDS.createSparqlAtomicGrounding(URIUtils.createURI(baseURI +"TestAtomicGrounding"));
+	    atomicGrounding.setSparqlEndPoint(URIUtils.createURI("http://dbpedia.org/sparql"));
+	    atomicGrounding.setProcess(process);
+	    
+	    SparqlPrefixes sparqlPrefix = this.ontSWoDS.createSparqlPrefixes(URIUtils.createURI(baseURI + "RDFPrefix"));
+	    sparqlPrefix.setPrefixName("rdf");
+	    sparqlPrefix.setPrefixUri(URIUtils.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
+	    atomicGrounding.addPrefix(sparqlPrefix);
+	    
+	    List<SparqlTriples> lTriple;
+	    lTriple = new ArrayList<SparqlTriples>();
+		//end
 		
 		StringBuffer prefix = new StringBuffer();
 		prefix.append("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n");
@@ -443,6 +559,7 @@ public class RequestToSparqlGrounding {
 		List<String> whereInputs;
 		whereInputs = new ArrayList<String>();
 		for(int i=0; i < this.outputs.size(); i++){
+			
 			
 			//String prefixName = this.outputs.get(i).getLocalName().toLowerCase();
 			//prefix.append("PREFIX " + prefixName + ": ");
@@ -457,7 +574,26 @@ public class RequestToSparqlGrounding {
 				OWLDataValue p = props.next();
 				output_ontology = p.getValue().toString().trim();
 			}
+			//add triple to SWoDS
+			SparqlTriples otriple = this.ontSWoDS.createSparqlTriples(URIUtils.createURI(baseURI +"oTriple_"+this.outputs.get(i).getLocalName().toLowerCase()));
+			otriple.setTriplePredicate("<" +output_ontology + ">");
+			otriple.setTripleObject(variable);
+			lTriple.add(i, otriple);
+			//end
 			
+			//add output to SWoDS
+			Output newOutput = this.ontSWoDS.createOutput(URIUtils.createURI("Output" + i));
+			newOutput.setLabel(outputs.get(i).getLabel(null), null);
+			newOutput.setProperty(OWLS.Process.parameterType, URIUtils.createURI(output_ontology));	
+	        //newInput.setParamType(inputs.get(i).getParamType());
+			newOutput.setProcess(process);	    	
+	    	profile.addOutput(newOutput);
+	    	process.addOutput(newOutput);
+	    	MessageMap<String> outputMap = this.ontSWoDS.createSparqlOutputParamMap(URIUtils.createURI("OutputMap" + i));
+	    	outputMap.setGroundingParameter(variable);
+	    	outputMap.setOWLSParameter(newOutput);
+		    atomicGrounding.addOutputMap(outputMap);
+			//end
 			whereInputs.add(i, "<" +output_ontology + "> " + variable + " .\n");	
 			
 		}
@@ -467,8 +603,30 @@ public class RequestToSparqlGrounding {
 			//String prefixName = this.inputs.get(i).getLocalName().toLowerCase();				
 			//prefix.append("PREFIX " + prefixName + ": ");
 			//prefix.append("<" + this.inputs.get(i).getParamType().getURI() + ">\n");
-
+			
 			String variable = "?var_" + this.inputs.get(i).getLocalName().toLowerCase();
+			
+			//add triple to SWoDS
+			SparqlTriples triple = this.ontSWoDS.createSparqlTriples(URIUtils.createURI(baseURI + "Triple_" + this.inputs.get(i).getLocalName().toLowerCase()));
+		    triple.setTripleSubject(variable);
+		    triple.setTriplePredicate("rdf:type");
+		    triple.setTripleObject("<" + this.inputs.get(i).getParamType().getURI() + ">");
+		    atomicGrounding.addTriple(triple);
+			//end
+		  //add input to SWoDS
+			Input newInput = this.ontSWoDS.createInput(URIUtils.createURI("Input" + i));
+			newInput.setLabel(inputs.get(i).getLabel(null), null);
+			newInput.setProperty(OWLS.Process.parameterType, this.inputs.get(i).getParamType().getURI());	
+	        //newInput.setParamType(inputs.get(i).getParamType());
+			newInput.setProcess(process);	    	
+	    	profile.addInput(newInput);
+	    	process.addInput(newInput);
+	    	MessageMap<String> inputMap = this.ontSWoDS.createSparqlInputParamMap(URIUtils.createURI("InputMap" + i));
+	    	inputMap.setGroundingParameter(variable);
+	    	inputMap.setOWLSParameter(newInput);
+		    atomicGrounding.addInputMap(inputMap);
+	    	
+			//end
 			
 			where.append(variable + " rdf:type " + "<" + this.inputs.get(i).getParamType().getURI() + "> .\n" );
 			
@@ -488,6 +646,11 @@ public class RequestToSparqlGrounding {
 				for(int z=0; z < properties.getLength(); z++){
 	    			Element e = (Element)properties.item(z);
 	    			if(e.getAttribute("uri").contains(output_ontology)){
+	    				//add triple to SWoDS
+	    				SparqlTriples otriple = lTriple.get(j);
+						otriple.setTripleSubject(variable);
+						atomicGrounding.addTriple(otriple);
+	    				//end
 	    				where.append(variable + " " + whereInputs.get(j));
 	    			}
 	    		}
@@ -496,9 +659,14 @@ public class RequestToSparqlGrounding {
 		
 		where.append("}\n");
 		
+		this.SWoDS.addProfile(profile);
+		this.SWoDS.setProcess(process);
+	    aGrounding.addGrounding(atomicGrounding);
+	    this.SWoDS.addGrounding(aGrounding);
 		
 		this.sparqlQuery = (prefix.toString() + ask.toString() + where.toString());
 		System.out.println(this.sparqlQuery);
+		
 		
 	}
 	
@@ -521,27 +689,14 @@ public class RequestToSparqlGrounding {
 		return result;
 	}
 	
-	public void buildSparqlGrounding(String uri, String output){
-		OntModel m = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM );
+	public void buildSWoDS(String filePath, Set<org.mindswap.owl.OWLOntology> imports) throws FileNotFoundException{
 		
-		m.setNsPrefix( "owl", OWL.getURI() );
-	    m.setNsPrefix( "rdf", RDF.getURI() );
-	    m.setNsPrefix( "rdfs", RDFS.getURI() );
-	    m.setNsPrefix( "dc", DC_11.getURI() );
-	    m.setNsPrefix( "xsd", XSD.getURI() );
-	    //m.setNsPrefix( "grounding", Grounding. );
-	    
-	    
-	    Ontology ont = m.createOntology( uri );
-	    ont.addProperty( DC_11.title, "The LinkedDataTools.com Example Plant Ontology" )
-	    .addProperty( DC_11.description, "An example ontology written for the " +
-	                                        "LinkedDataTools.com RDFS & OWL introduction tutorial" );
-	    OntClass plantType = m.createClass( uri + "#planttype" );
-	    plantType.addProperty( RDFS.label, "The plant type" )
-	             .addProperty( RDFS.comment, "The class of plant types." );
-	    
-	    m.write( System.out, "RDF/XML-ABBREV" );
-		
+		this.ontSWoDS.addImports(imports);
+		FileOutputStream aOutputStream = new FileOutputStream(filePath);
+	    OWLWriter aWriter = this.ontSWoDS.getWriter();
+
+	    // write this ontology out to the specified output stream
+	    aWriter.write(this.ontSWoDS, aOutputStream, this.ontSWoDS.getURI());	
 	}
 
 }

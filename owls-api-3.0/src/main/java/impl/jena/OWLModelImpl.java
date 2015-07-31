@@ -161,6 +161,11 @@ import br.ufba.dcc.linked_data.SparqlGrounding;
 import br.ufba.dcc.linked_data.SparqlGroundingFactory;
 import br.ufba.dcc.linked_data.SparqlPrefixes;
 import br.ufba.dcc.linked_data.SparqlTriples;
+import br.ufg.inf.sws.rest.WADLAtomicGrounding;
+import br.ufg.inf.sws.rest.WADLGrounding;
+import br.ufg.inf.sws.rest.WADLGroundingFactory;
+import br.ufg.inf.sws.rest.WADLResourceMethodRef;
+import br.ufg.inf.sws.rest.impl.TransformationFileMap;
 import ch.unibas.on.sem.datatypes.TypeMapper;
 
 import com.hp.hpl.jena.datatypes.BaseDatatype;
@@ -1252,6 +1257,24 @@ public abstract class OWLModelImpl implements OWLModel
 	
 	public MessageMap<String> createSparqlOutputParamMap(final URI uri)
 	{ return SparqlGroundingFactory.createSparqlOutputParamMap(uri, this);	}
+	
+	public WADLGrounding createWADLGrounding(final URI uri)
+	{ 
+		return WADLGroundingFactory.createWADLGrounding(uri, this); }
+	
+	public WADLAtomicGrounding createWADLAtomicGrounding(final URI uri)
+	{ 
+		return WADLGroundingFactory.createWADLAtomicGrounding(uri, this); }
+	
+	public WADLResourceMethodRef createWADLResourceMethodRef(URI uri){
+		return WADLGroundingFactory.createWADLResourceMethodRef(uri, this);
+	}
+	
+	public MessageMap<TransformationFileMap> createWADLRequestParamMap(final URI uri)
+	{ return WADLGroundingFactory.createWADLRequestParamMap(uri, this);	}
+	
+	public MessageMap<TransformationFileMap> createWADLResponseParamMap(final URI uri)
+	{ return WADLGroundingFactory.createWADLResponseParamMap(uri, this);	}	
 
 	public ValueOf createValueOf(final URI uri)
 	{ return new ValueOfImpl(createInstance(OWLS.Process.ValueOf, uri)); }
